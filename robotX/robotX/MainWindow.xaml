@@ -1,0 +1,170 @@
+﻿<Window x:Class="robotX.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:robotX"
+        mc:Ignorable="d"
+        Title="  工具套件                                                                                  " Height="638.063" Width="900">
+    <TabControl>
+        <TabItem Header="Shell UI ">
+            <DockPanel>
+                <GroupBox Header="无参数命令"  DockPanel.Dock="Top">
+                    <Grid Name="ButtonPanel" Height="211">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="3*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <GridSplitter  HorizontalAlignment="Stretch" VerticalAlignment="Bottom"  Height="2"  Panel.ZIndex="9" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="0" Background="Gray"  />
+                        <GridSplitter  HorizontalAlignment="Stretch" VerticalAlignment="Bottom"  Height="2" Panel.ZIndex="9" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1" Background="Gray"  />
+                        <GridSplitter  VerticalAlignment="Stretch" Grid.RowSpan="3" Width="2" Panel.ZIndex="9" Grid.Column="0" Grid.Row="0" Background="Gray"  />
+                        <GridSplitter  VerticalAlignment="Stretch" Grid.RowSpan="3" Width="2" Panel.ZIndex="9" Grid.Column="1" Grid.Row="0" Background="Gray"  />
+                        <Button Content="更改适配器" Name="Ncpa" Grid.Row="0"  Grid.Column="0" ToolTip="ncpa.cpl" Click="CmdProcess"/>
+                        <Button Content="配置Java环境变量" Name="Ipconfig"   Grid.Row="0"  Grid.Column="1" ToolTip="shell:startup" Click="SetPath"/>
+                        <Button Content="Internet选项" Name="Inetcpl"   Grid.Row="0"  Grid.Column="2" ToolTip="inetcpl.cpl" Click="CmdProcess"/>
+                        <Button Content="软件安装与卸载" Name="Appwiz"  Grid.Row="1"  Grid.Column="0" ToolTip="appwiz.cpl" Click="CmdProcess"/>
+                        <Button Content="本地服务"  Name="Services"  Grid.Row="1"  Grid.Column="1" ToolTip="services.msc" Click="CmdProcess"/>
+                        <Button Content="软键盘"  Name="Osk"  Grid.Row="1"  Grid.Column="2" ToolTip="osk" Click="CmdProcess"/>
+                        <Button Content="事件查看器"  Name="Eventvwr"  Grid.Row="2"  Grid.Column="0" ToolTip="eventvwr.msc" Click="CmdProcess"/>
+                        <Button Content="任务管理器"   Name="Taskmgr" Grid.Row="2"  Grid.Column="1" ToolTip=" taskmgr" Click="CmdProcess"/>
+                        <Button Content="系统完整信息"  Name="Msinfo32"  Grid.Row="2"  Grid.Column="24" ToolTip="msinfo32" Click="CmdProcess"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="有参数命令" Height="100" VerticalAlignment="Top" DockPanel.Dock="Top">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
+                    <ComboBox Name="CmdBox" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Width="120" Margin="0,0,0,0" SelectionChanged="ComboBox_SelectionChanged">
+                            <ComboBoxItem ToolTip="xx">Ping</ComboBoxItem>
+                            <ComboBoxItem >远程桌面</ComboBoxItem>
+                            <ComboBoxItem>杀进程</ComboBoxItem>
+                            <ComboBoxItem>FTP</ComboBoxItem>
+                        <ComboBoxItem>杀进程</ComboBoxItem>
+                        <ComboBoxItem>杀进程</ComboBoxItem>
+                    </ComboBox>
+                        <TextBox Height="27" Name="Paramenter" TextWrapping="Wrap" Text="参数" VerticalAlignment="Bottom"  Margin="140,0,0,0" Width="320"/>
+                        <Button Content="执行"  Name="Submit"  Margin="140,0,0,0" Width="100"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox DockPanel.Dock="Left" Header="系统信息" Width="220" HorizontalAlignment="Left" Margin="5 0 0 5 ">
+                    <TextBlock Margin="10 15"  LineHeight="37"   Name="SMeta" TextWrapping="Wrap" Text="" />
+                </GroupBox>
+                <GroupBox DockPanel.Dock="Left" Header="执行结果" Width="640" HorizontalAlignment="Right" Margin="0 0 5 5 ">
+                    <ScrollViewer Name="Screen">
+                        <TextBlock Margin="10 15"    LineHeight="37"   Name="Result" TextWrapping="Wrap" Text="功能
+开机启动设置
+Powershell
+搜索栏环境变量
+远程
+在运行里方便查IP
+打开控制面板
+关闭电脑
+系统信息
+任务管理器
+工具
+设置启动项
+注册dll文件
+程序安装卸载
+环境变量,重开cmd刷新
+设备管理器
+internet属性
+防火墙
+适配器
+服务
+设备管理器
+事件查看器，电脑司机愿意
+计算机管理
+软键盘
+系统属性
+控制面板项/control panel
+
+
+
+功能
+打开网页
+暂停
+产生鸣响
+建立新文件或增加文件内容 
+查看系统变量变量
+调用批处理
+打开程序/启动单独批量窗口
+组合键来强行终止一个批处理的执行过程
+
+注释
+cmd窗口的标题栏
+设置背景色，前景色
+#在 C:\ 建立 mp3 文件夹
+goto语句
+if语句
+获取第三个参数
+" />
+                    </ScrollViewer>
+                </GroupBox>
+            </DockPanel>
+        </TabItem>
+        <TabItem Header=" LIS一键配置">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70*"/>
+                    <RowDefinition Height="19*"/>
+                    <RowDefinition Height="52*"/>
+                    <RowDefinition Height="73*"/>
+                    <RowDefinition Height="94*"/>
+                    <RowDefinition Height="82*"/>
+                    <RowDefinition Height="217*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="7*"/>
+                    <ColumnDefinition Width="7*"/>
+                    <ColumnDefinition Width="104*"/>
+                    <ColumnDefinition Width="245*"/>
+                    <ColumnDefinition Width="114*"/>
+                    <ColumnDefinition Width="126*"/>
+                    <ColumnDefinition Width="280*"/>
+                </Grid.ColumnDefinitions>
+                <GroupBox Grid.ColumnSpan="4" Header="GroupBox" HorizontalAlignment="Left" Height="100" Grid.RowSpan="3" VerticalAlignment="Top" Width="100">
+                    
+                </GroupBox>
+                <TextBlock HorizontalAlignment="Left" Height="26" Margin="0,4,0,0" TextWrapping="Wrap" Text="IP" VerticalAlignment="Top" Width="99" RenderTransformOrigin="1.822,6.278" TextAlignment="Center" Grid.Column="4" Grid.Row="1" Grid.RowSpan="2"/>
+                <Button Content="配置" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="107,106,0,0" Click="Button_Click" Grid.Column="7" Height="19" Grid.Row="6"/>
+                <TextBox Name="HisIP"  HorizontalAlignment="Left" Height="26" Margin="0,28,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="218" TextChanged="HisIP_TextChanged" Grid.Column="4" Grid.Row="2" Grid.RowSpan="2"/>
+                <TextBox Name="UnitsCode" HorizontalAlignment="Left" Margin="0,0,0,28" TextWrapping="Wrap" Text="" Width="218" Height="30" VerticalAlignment="Bottom" TextChanged="TextBox_TextChanged" Grid.Column="4" Grid.Row="5"/>
+                <TextBox Name="TomcatPort" HorizontalAlignment="Left" Height="26" Margin="2,49,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="93" Grid.Column="5" Grid.Row="5"/>
+                <TextBox Name="HisDBPSW" HorizontalAlignment="Left" Height="26" Margin="19,28,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="96" Grid.Column="6" Grid.Row="2" Grid.RowSpan="2"/>
+                <TextBox Name="HisDBUser" HorizontalAlignment="Left" Height="26" Margin="2,28,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="93" TextChanged="TextBox_TextChanged" Grid.Column="5" Grid.Row="2" Grid.RowSpan="2"/>
+                <TextBox Name="LisIP" HorizontalAlignment="Left" Height="26" Margin="0,11,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="218" Grid.Column="4" Grid.Row="3"/>
+                <TextBox Name="LisDBPSW" HorizontalAlignment="Left" Height="26" Margin="21,11,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="96" Grid.Column="6" Grid.Row="3"/>
+                <TextBox Name="LisDBUser" HorizontalAlignment="Left" Height="26" Margin="2,11,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="93" Grid.Column="5" Grid.Row="3"/>
+                <TextBlock HorizontalAlignment="Left" Height="26" Margin="2,4,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="99" RenderTransformOrigin="1.822,6.278" Grid.Column="5" Grid.Row="1" Grid.RowSpan="2"><Run Text="数据库"/><Run Text="用户名"/></TextBlock>
+                <TextBlock HorizontalAlignment="Left" Height="26" Margin="19,3,0,0" TextWrapping="Wrap" Text="密码" VerticalAlignment="Top" Width="99" RenderTransformOrigin="1.822,6.278" Grid.Column="6" Grid.Row="1" Grid.RowSpan="2"/>
+                <TextBox Name="HisORCLInstance" HorizontalAlignment="Left" Height="26" Margin="17,29,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="96" Grid.Column="7" Grid.Row="2" Grid.RowSpan="2"/>
+                <TextBox Name="LisORCLInstance" HorizontalAlignment="Left" Height="26" Margin="17,11,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="96" Grid.Column="7" Grid.Row="3"/>
+                <TextBlock HorizontalAlignment="Left" Height="21" Margin="3,180,0,0" TextWrapping="Wrap" Text="本地IP：" VerticalAlignment="Top" Width="110" Grid.ColumnSpan="2" Grid.Row="6" Grid.Column="3"/>
+                <TextBox Name="MatrixIP" HorizontalAlignment="Left" Height="26" Margin="0,47,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="218" Grid.Column="4" Grid.Row="4"/>
+                <TextBox Name="MatrixPort" HorizontalAlignment="Left" Height="26" Margin="2,47,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="93" Grid.Column="5" Grid.Row="4"/>
+                <TextBlock HorizontalAlignment="Left" Height="26" Margin="3,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="99" RenderTransformOrigin="1.822,6.278" Grid.Column="5" Grid.Row="4"><Run Text="      "/><Run Text="端口"/><Run Text="号"/></TextBlock>
+                <TextBlock HorizontalAlignment="Left" Height="26" Margin="8,14,0,0" TextWrapping="Wrap" Text="医院代码" VerticalAlignment="Top" Width="99" RenderTransformOrigin="1.822,6.278" TextAlignment="Center" Grid.Column="4" Grid.Row="5"/>
+                <TextBlock HorizontalAlignment="Left" Height="26" Margin="2,14,0,0" TextWrapping="Wrap" Text="Tomcat端口" VerticalAlignment="Top" Width="99" RenderTransformOrigin="1.822,6.278" Grid.Column="5" Grid.Row="5"/>
+                <Label Content="Matrix" HorizontalAlignment="Left" Height="24" Margin="56,49,0,0" VerticalAlignment="Top" Width="70" Grid.ColumnSpan="2" Grid.Row="4" Grid.Column="3"/>
+                <Label Content="Matrix" HorizontalAlignment="Left" Height="24" Margin="56,49,0,0" VerticalAlignment="Top" Width="70" Grid.ColumnSpan="2" Grid.Row="4" Grid.Column="3"/>
+                <Label Content="Lis" HorizontalAlignment="Left" Height="24" Margin="53,11,0,0" VerticalAlignment="Top" Width="70" FontWeight="Bold" Grid.ColumnSpan="2" Grid.Row="3" Grid.Column="3"/>
+                <Label Content="His" HorizontalAlignment="Left" Height="24" Margin="53,31,0,0" VerticalAlignment="Top" Width="70" FontWeight="Bold" Grid.ColumnSpan="2" Grid.Row="2" Grid.RowSpan="2" Grid.Column="3"/>
+                <TextBlock Name="LocalIP" Grid.Column="4" HorizontalAlignment="Left" Height="21" Margin="10,130,0,0" Grid.Row="6" TextWrapping="Wrap" Text=""  VerticalAlignment="Top" Width="177"/>
+                <Label Content="实例名" HorizontalAlignment="Left" Height="24" Margin="43,1,0,0" VerticalAlignment="Top" Width="70" Grid.Column="7" Grid.RowSpan="2" Grid.Row="1"/>
+                <Button Name="CopyB" Content="↓↓↓ 复制 ↓↓↓" Grid.Column="4" HorizontalAlignment="Left" Margin="78,18,0,0" Grid.Row="4" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.16,-0.158" Click="Button_Click_1" Height="19"/>
+                <CheckBox Name="IsNewHIS" Content="新HIS" Grid.Column="6" HorizontalAlignment="Left" Margin="21,49,0,0" Grid.Row="5" VerticalAlignment="Top" Height="26" Width="80" IsChecked="True"/>
+                <StatusBar Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="22" Margin="3,151,0,0" Grid.Row="6" VerticalAlignment="Top" Width="531" Grid.Column="3"/>
+                
+            </Grid>
+            <!--添加其余的TabItem-->
+        </TabItem>
+        <TabItem Header="Java环境变量">
+        </TabItem>
+    </TabControl>
+
+</Window>
