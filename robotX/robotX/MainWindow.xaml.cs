@@ -65,14 +65,37 @@ namespace robotX
             p.StartInfo.RedirectStandardOutput = true;//由调用程序获取输出信息
             p.StartInfo.RedirectStandardError = true;//重定向标准错误输出
             p.StartInfo.CreateNoWindow = true;//不显示程序窗口
-            //p.StandardInput.AutoFlush = true;
-            p.Start();//启动程序
-
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardInput = true;
+            p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.UseShellExecute = false;              //是否指定操作系统外壳进程启动程序，这里需为false  
+            p.StartInfo.RedirectStandardOutput = true;// 设置为 true
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardInput = true;
+            p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.UseShellExecute = false;              //是否指定操作系统外壳进程启动程序，这里需为false  
+            p.StartInfo.RedirectStandardOutput = true;// 设置为 true
 
 
             //p.Close();
             SetSysMeta();
             
+        }
+
+        private void Excute(object sender, RoutedEventArgs e)
+        {
+            string para = ((ComboBoxItem)this.CmdBox.SelectedItem).Tag.ToString() + " " + (this.Parameter.Text).Trim() + "&exit";
+
+            p.Start();//启动程序
+            p.StandardInput.WriteLine(para);
+            p.StandardInput.Flush();
+           p.StandardInput.AutoFlush = true;
+            string  result = p.StandardOutput.ReadToEnd() + p.StandardError.ReadToEnd();
+            result = result.Replace("\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n").Replace("&exit", "");
+            MessageBox.Show(result);
+            this.Result.Text = result;
+            p.WaitForExit();//等待程序执行完退出进程
+            //p.Close();
         }
         private void GetMetaInfo()
         {
@@ -128,9 +151,9 @@ namespace robotX
 
         private void CmdProcess(object sender, RoutedEventArgs e)
         {
+            p.Start();//启动程序
             Button objButton = (Button)sender;
             p.StandardInput.WriteLine(objButton.ToolTip);
-            //p.WaitForExit();//等待程序执行完退出进程
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -385,7 +408,6 @@ namespace robotX
 
 
             }
-            MessageBox.Show(Convert.ToString(CmdBox.SelectedIndex));
             
         }
 
@@ -394,11 +416,11 @@ namespace robotX
             try
             {
 
-            string parameter = this.Paramenter.Text;
+            string parameter = this.Parameter.Text;
             if(Regex.IsMatch(parameter, @"^[a-zA-Z]:(((\\(?! )[^/:*?<>\""|\\]+)+\\?)|(\\)?)\s*$"))
             {
 
-            Environment.SetEnvironmentVariable("JAVA_HOME ", this.Paramenter.Text, EnvironmentVariableTarget.Machine);
+            Environment.SetEnvironmentVariable("JAVA_HOME ", this.Parameter.Text, EnvironmentVariableTarget.Machine);
             Environment.SetEnvironmentVariable("CLASSPATH", @".;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;", EnvironmentVariableTarget.Machine);
             Add2Path();
 
@@ -432,5 +454,16 @@ namespace robotX
                 Environment.SetEnvironmentVariable("PATH", pathValue + ";" + pathlist, EnvironmentVariableTarget.Machine);
             }
         }
+
+        private void ComboBoxItem_Selected(object sender, RoutedEventArgs e)
+        {
+          
+        }
+
+        private void Paramenter_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
     }
 }

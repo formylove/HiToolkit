@@ -26,28 +26,31 @@
                         <GridSplitter  VerticalAlignment="Stretch" Grid.RowSpan="3" Width="2" Panel.ZIndex="9" Grid.Column="0" Grid.Row="0" Background="Gray"  />
                         <GridSplitter  VerticalAlignment="Stretch" Grid.RowSpan="3" Width="2" Panel.ZIndex="9" Grid.Column="1" Grid.Row="0" Background="Gray"  />
                         <Button Content="更改适配器" Name="Ncpa" Grid.Row="0"  Grid.Column="0" ToolTip="ncpa.cpl" Click="CmdProcess"/>
-                        <Button Content="配置Java环境变量" Name="Ipconfig"   Grid.Row="0"  Grid.Column="1" ToolTip="shell:startup" Click="SetPath"/>
-                        <Button Content="Internet选项" Name="Inetcpl"   Grid.Row="0"  Grid.Column="2" ToolTip="inetcpl.cpl" Click="CmdProcess"/>
+                        <Button Content="IpConfig" Name="Ipconfig"   Grid.Row="0"  Grid.Column="1" ToolTip="ipconfig"  Click="SetPath"/>
+                        <Button Content="计算机管理" Name="Inetcpl"   Grid.Row="0"  Grid.Column="2" ToolTip="compmgmt.msc" Click="CmdProcess"/>
                         <Button Content="软件安装与卸载" Name="Appwiz"  Grid.Row="1"  Grid.Column="0" ToolTip="appwiz.cpl" Click="CmdProcess"/>
                         <Button Content="本地服务"  Name="Services"  Grid.Row="1"  Grid.Column="1" ToolTip="services.msc" Click="CmdProcess"/>
-                        <Button Content="软键盘"  Name="Osk"  Grid.Row="1"  Grid.Column="2" ToolTip="osk" Click="CmdProcess"/>
+                        <Button Content="控制面板"  Name="Osk"  Grid.Row="1"  Grid.Column="2" ToolTip="control.exe" Click="CmdProcess"/>
                         <Button Content="事件查看器"  Name="Eventvwr"  Grid.Row="2"  Grid.Column="0" ToolTip="eventvwr.msc" Click="CmdProcess"/>
                         <Button Content="任务管理器"   Name="Taskmgr" Grid.Row="2"  Grid.Column="1" ToolTip=" taskmgr" Click="CmdProcess"/>
-                        <Button Content="系统完整信息"  Name="Msinfo32"  Grid.Row="2"  Grid.Column="24" ToolTip="msinfo32" Click="CmdProcess"/>
+                        <Button Content="系统属性"  Name="Msinfo32"  Grid.Row="2"  Grid.Column="24" ToolTip="control.exe system" Click="CmdProcess"/>
                     </Grid>
                 </GroupBox>
                 <GroupBox Header="有参数命令" Height="100" VerticalAlignment="Top" DockPanel.Dock="Top">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
                     <ComboBox Name="CmdBox" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Width="120" Margin="0,0,0,0" SelectionChanged="ComboBox_SelectionChanged">
-                            <ComboBoxItem ToolTip="xx">Ping</ComboBoxItem>
-                            <ComboBoxItem >远程桌面</ComboBoxItem>
-                            <ComboBoxItem>杀进程</ComboBoxItem>
-                            <ComboBoxItem>FTP</ComboBoxItem>
-                        <ComboBoxItem>杀进程</ComboBoxItem>
-                        <ComboBoxItem>杀进程</ComboBoxItem>
-                    </ComboBox>
-                        <TextBox Height="27" Name="Paramenter" TextWrapping="Wrap" Text="参数" VerticalAlignment="Bottom"  Margin="140,0,0,0" Width="320"/>
-                        <Button Content="执行"  Name="Submit"  Margin="140,0,0,0" Width="100"/>
+                            <ComboBoxItem IsSelected="True" ToolTip="目标计算机IP" Tag="ping">Ping</ComboBoxItem>
+                            <ComboBoxItem ToolTip="目标计算机IP" Tag="mstsc -v" Selected="ComboBoxItem_Selected">远程桌面</ComboBoxItem>
+                            <ComboBoxItem ToolTip="JDK文件夹路径" Tag="mstsc -v" Selected="ComboBoxItem_Selected">Java环境变量</ComboBoxItem>
+                            <ComboBoxItem ToolTip="目标进程的进程号(ID)" Tag="taskkill /t /f /pid">杀进程(pid)</ComboBoxItem>
+                            <ComboBoxItem ToolTip="目标进程的进程名(如javaw.exe)" Tag="taskkill /t /f /im">杀进程(进程)</ComboBoxItem>
+                            <ComboBoxItem Tag="start ftp://" ToolTip="目标FTP服务器IP">FTP</ComboBoxItem>
+                            <ComboBoxItem Tag="netstat -ano" ToolTip="端口号查询">显示所有进程及端口</ComboBoxItem>
+                            <ComboBoxItem Tag="netstat -ano | findstr" ToolTip="端口号查询">查询端口</ComboBoxItem>
+                            <ComboBoxItem Tag="tasklist | findstr" ToolTip="目标进程进程号(PID)">目标进程进程号(PID)</ComboBoxItem>
+                        </ComboBox>
+                        <TextBox Height="27" Name="Parameter" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom"  Margin="140,0,0,0" Width="320"  TextChanged="Paramenter_TextChanged"/>
+                        <Button Content="执行"  Name="Submit" Click="Excute" Margin="140,0,0,0" Width="100"/>
                     </StackPanel>
                 </GroupBox>
                 <GroupBox DockPanel.Dock="Left" Header="系统信息" Width="220" HorizontalAlignment="Left" Margin="5 0 0 5 ">
@@ -55,53 +58,7 @@
                 </GroupBox>
                 <GroupBox DockPanel.Dock="Left" Header="执行结果" Width="640" HorizontalAlignment="Right" Margin="0 0 5 5 ">
                     <ScrollViewer Name="Screen">
-                        <TextBlock Margin="10 15"    LineHeight="37"   Name="Result" TextWrapping="Wrap" Text="功能
-开机启动设置
-Powershell
-搜索栏环境变量
-远程
-在运行里方便查IP
-打开控制面板
-关闭电脑
-系统信息
-任务管理器
-工具
-设置启动项
-注册dll文件
-程序安装卸载
-环境变量,重开cmd刷新
-设备管理器
-internet属性
-防火墙
-适配器
-服务
-设备管理器
-事件查看器，电脑司机愿意
-计算机管理
-软键盘
-系统属性
-控制面板项/control panel
-
-
-
-功能
-打开网页
-暂停
-产生鸣响
-建立新文件或增加文件内容 
-查看系统变量变量
-调用批处理
-打开程序/启动单独批量窗口
-组合键来强行终止一个批处理的执行过程
-
-注释
-cmd窗口的标题栏
-设置背景色，前景色
-#在 C:\ 建立 mp3 文件夹
-goto语句
-if语句
-获取第三个参数
-" />
+                        <TextBlock Margin="10 15"    LineHeight="37"   Name="Result" TextWrapping="Wrap" Text="" />
                     </ScrollViewer>
                 </GroupBox>
             </DockPanel>
