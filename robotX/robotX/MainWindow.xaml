@@ -6,6 +6,13 @@
         xmlns:local="clr-namespace:robotX"
         mc:Ignorable="d"
         Title="  工具套件                                                                                  " Height="638.063" Width="900">
+    <Window.Resources>
+        <DataTemplate x:Key="reList">
+            <ListBoxItem ToolTip="{Binding IP}"  Content="{Binding IP}">
+            </ListBoxItem>
+        </DataTemplate>
+
+    </Window.Resources>
     <TabControl>
         <TabItem Header="Shell UI ">
             <DockPanel>
@@ -26,7 +33,7 @@
                         <GridSplitter  VerticalAlignment="Stretch" Grid.RowSpan="3" Width="2" Panel.ZIndex="9" Grid.Column="0" Grid.Row="0" Background="Gray"  />
                         <GridSplitter  VerticalAlignment="Stretch" Grid.RowSpan="3" Width="2" Panel.ZIndex="9" Grid.Column="1" Grid.Row="0" Background="Gray"  />
                         <Button Content="更改适配器" Name="Ncpa" Grid.Row="0"  Grid.Column="0" ToolTip="ncpa.cpl" Click="CmdProcess"/>
-                        <Button Content="IpConfig" Name="Ipconfig"   Grid.Row="0"  Grid.Column="1" ToolTip="ipconfig"  Click="SetPath"/>
+                        <Button Content="IpConfig" Name="Ipconfig"   Grid.Row="0"  Grid.Column="1" ToolTip="ipconfig"  Click="CmdProcess"/>
                         <Button Content="计算机管理" Name="Inetcpl"   Grid.Row="0"  Grid.Column="2" ToolTip="compmgmt.msc" Click="CmdProcess"/>
                         <Button Content="软件安装与卸载" Name="Appwiz"  Grid.Row="1"  Grid.Column="0" ToolTip="appwiz.cpl" Click="CmdProcess"/>
                         <Button Content="本地服务"  Name="Services"  Grid.Row="1"  Grid.Column="1" ToolTip="services.msc" Click="CmdProcess"/>
@@ -38,18 +45,45 @@
                 </GroupBox>
                 <GroupBox Header="有参数命令" Height="100" VerticalAlignment="Top" DockPanel.Dock="Top">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
-                    <ComboBox Name="CmdBox" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Width="120" Margin="0,0,0,0" SelectionChanged="ComboBox_SelectionChanged">
-                            <ComboBoxItem IsSelected="True" ToolTip="目标计算机IP" Tag="ping">Ping</ComboBoxItem>
-                            <ComboBoxItem ToolTip="目标计算机IP" Tag="mstsc -v" Selected="ComboBoxItem_Selected">远程桌面</ComboBoxItem>
-                            <ComboBoxItem ToolTip="JDK文件夹路径" Tag="mstsc -v" Selected="ComboBoxItem_Selected">Java环境变量</ComboBoxItem>
-                            <ComboBoxItem ToolTip="目标进程的进程号(ID)" Tag="taskkill /t /f /pid">杀进程(pid)</ComboBoxItem>
-                            <ComboBoxItem ToolTip="目标进程的进程名(如javaw.exe)" Tag="taskkill /t /f /im">杀进程(进程)</ComboBoxItem>
-                            <ComboBoxItem Tag="start ftp://" ToolTip="目标FTP服务器IP">FTP</ComboBoxItem>
-                            <ComboBoxItem Tag="netstat -ano" ToolTip="端口号查询">显示所有进程及端口</ComboBoxItem>
-                            <ComboBoxItem Tag="netstat -ano | findstr" ToolTip="端口号查询">查询端口</ComboBoxItem>
-                            <ComboBoxItem Tag="tasklist | findstr" ToolTip="目标进程进程号(PID)">目标进程进程号(PID)</ComboBoxItem>
+                        <ComboBox Name="CmdBox" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Width="120" Margin="0,0,0,0" SelectionChanged="ComboBox_SelectionChanged">
+                            <ComboBoxItem IsSelected="True" ToolTip="目标计算机IP" Tag="ping ">Ping</ComboBoxItem>
+                            <ComboBoxItem ToolTip="目标计算机IP" Tag="mstsc -v " Selected="ComboBoxItem_Selected">远程桌面</ComboBoxItem>
+                            <ComboBoxItem ToolTip="JDK文件夹路径" Tag="mstsc -v " Selected="ComboBoxItem_Selected">Java环境变量</ComboBoxItem>
+                            <ComboBoxItem ToolTip="目标进程的进程号(ID)" Tag="taskkill /t /f /pid ">杀进程(pid)</ComboBoxItem>
+                            <ComboBoxItem ToolTip="目标进程的进程名(如javaw.exe)" Tag="taskkill /t /f /im ">杀进程(进程)</ComboBoxItem>
+                            <ComboBoxItem Tag="	&quot;%SystemRoot%\explorer.exe	&quot; ftp://192.168.1.7" ToolTip="目标FTP服务器IP">FTP</ComboBoxItem>
+                            <ComboBoxItem Tag="netstat -ano " ToolTip="端口号查询">显示所有进程及端口</ComboBoxItem>
+                            <ComboBoxItem Tag="netstat -ano | findstr " ToolTip="端口号查询">查询端口</ComboBoxItem>
+                            <ComboBoxItem Tag="tasklist | findstr " ToolTip="目标进程进程号(PID)">目标进程进程号(PID)</ComboBoxItem>
                         </ComboBox>
-                        <TextBox Height="27" Name="Parameter" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom"  Margin="140,0,0,0" Width="320"  TextChanged="Paramenter_TextChanged"/>
+                       
+
+                        <Popup Name="Popup" IsOpen="False" Placement="Bottom" PlacementTarget="{Binding ElementName=Parameter}"  StaysOpen="False">
+                                <ListBox  DisplayMemberPath="IP" SelectedValuePath="IP" Width="{Binding ElementName=Parameter,Path=Width}" x:Name="RecList" SelectionChanged="TipSelected" >
+                            </ListBox>
+                        </Popup>
+                        <TextBox GotFocus="ShowPopUp" MouseLeave="NotStaysOpen" MouseDoubleClick="ShowPopUp "  HorizontalAlignment="Center"  Name="Parameter" Width="300"  TextChanged="Paramenter_TextChanged"  VerticalAlignment="Bottom"  Margin="140,0,0,0">
+                            <TextBox.Resources>
+                                <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left">
+                                    <VisualBrush.Visual>
+                                        <TextBlock FontStyle="Italic" Text="提示文字"/>
+                                    </VisualBrush.Visual>
+                                    
+                                </VisualBrush>
+                            </TextBox.Resources>
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Style.Triggers>
+                                        <Trigger Property="Text" Value="{x:Null}">
+                                            <Setter Property="Background" Value="{StaticResource HintText}"/>
+                                        </Trigger>   
+                                        <Trigger Property="Text" Value="">
+                                            <Setter Property="Background" Value="{StaticResource HintText}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
                         <Button Content="执行"  Name="Submit" Click="Excute" Margin="140,0,0,0" Width="100"/>
                     </StackPanel>
                 </GroupBox>
@@ -63,7 +97,7 @@
                 </GroupBox>
             </DockPanel>
         </TabItem>
-        <TabItem Header=" LIS一键配置">
+        <TabItem Header=" LIS一键配置" Height="21" VerticalAlignment="Top">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="70*"/>
@@ -85,7 +119,7 @@
                     <ColumnDefinition Width="280*"/>
                 </Grid.ColumnDefinitions>
                 <GroupBox Grid.ColumnSpan="4" Header="GroupBox" HorizontalAlignment="Left" Height="100" Grid.RowSpan="3" VerticalAlignment="Top" Width="100">
-                    
+
                 </GroupBox>
                 <TextBlock HorizontalAlignment="Left" Height="26" Margin="0,4,0,0" TextWrapping="Wrap" Text="IP" VerticalAlignment="Top" Width="99" RenderTransformOrigin="1.822,6.278" TextAlignment="Center" Grid.Column="4" Grid.Row="1" Grid.RowSpan="2"/>
                 <Button Content="配置" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="107,106,0,0" Click="Button_Click" Grid.Column="7" Height="19" Grid.Row="6"/>
@@ -116,12 +150,58 @@
                 <Button Name="CopyB" Content="↓↓↓ 复制 ↓↓↓" Grid.Column="4" HorizontalAlignment="Left" Margin="78,18,0,0" Grid.Row="4" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.16,-0.158" Click="Button_Click_1" Height="19"/>
                 <CheckBox Name="IsNewHIS" Content="新HIS" Grid.Column="6" HorizontalAlignment="Left" Margin="21,49,0,0" Grid.Row="5" VerticalAlignment="Top" Height="26" Width="80" IsChecked="True"/>
                 <StatusBar Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="22" Margin="3,151,0,0" Grid.Row="6" VerticalAlignment="Top" Width="531" Grid.Column="3"/>
-                
+                <Popup>
+                    <Grid Background="#FFE5E5E5" Height="100" Width="100"/>
+                </Popup>
+
             </Grid>
             <!--添加其余的TabItem-->
         </TabItem>
         <TabItem Header="Java环境变量">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="17*"/>
+                    <ColumnDefinition Width="41*"/>
+                    <ColumnDefinition Width="828*"/>
+                </Grid.ColumnDefinitions>
+                <CheckBox Name="PCheckBox" Margin="10,10,0,0"
+          Content="Popup Window" Grid.ColumnSpan="3"/>
+                <Button HorizontalAlignment="Left" Width="129" Margin="10,10,0,0" Grid.ColumnSpan="3">
+                    <Button.Triggers>
+                        <EventTrigger RoutedEvent="Button.Click">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation
+            Storyboard.TargetName="theTransform"
+            Storyboard.TargetProperty="(RotateTransform.Angle)"
+            From="0" To="360" Duration="0:0:5" AutoReverse="True"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Button.Triggers>
+                    Start Animation
+                </Button>
+                <Popup IsOpen="{Binding ElementName=PCheckBox,Path=IsChecked}"
+       PlacementTarget="{Binding ElementName=PCheckBox}"           
+       AllowsTransparency="True"
+       PopupAnimation="Slide"
+       HorizontalOffset="150"
+       VerticalOffset="100" Grid.ColumnSpan="3"
+       >
+
+                    <Canvas Width="100" Height="100" Background="Green" Margin="150">
+                        <Canvas.RenderTransform>
+                            <RotateTransform x:Name="theTransform" />
+                        </Canvas.RenderTransform>
+                        <TextBlock TextWrapping="Wrap" Foreground="LightGray">
+      Rotating Popup
+                        </TextBlock>
+                    </Canvas>
+                </Popup>
+            </Grid>
         </TabItem>
+
+
     </TabControl>
 
 </Window>
