@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace robotX
 {
@@ -48,7 +47,7 @@ namespace robotX
             System.IO.StreamWriter file = new System.IO.StreamWriter(filename);
 
             foreach (String prop in list.Keys.ToArray())
-                if (!String.IsNullOrWhiteSpace(list[prop]))
+                if (!String.IsNullOrEmpty(list[prop]))
                     file.WriteLine(prop + "=" + list[prop]);
 
             file.Close();

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:robotX"
         mc:Ignorable="d"
-        Title="  工具套件                                                                                  " Height="638.063" Width="900">
+        Title="  工具套件                                                                                  " Height="640" Width="900">
     <Window.Resources>
         <DataTemplate x:Key="reList">
             <ListBoxItem ToolTip="{Binding IP}"  Content="{Binding IP}">
@@ -28,7 +28,7 @@
                             <ColumnDefinition Width="3*"/>
                             <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
-                        <GridSplitter  HorizontalAlignment="Stretch" VerticalAlignment="Bottom"  Height="2"  Panel.ZIndex="9" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="0" Background="Gray"  />
+                        <GridSplitter  HorizontalAlignment="Stretch" VerticalAlignment="Bottom"  Height="2"  Panel.ZIndex="9" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="0" Background="Gray" BorderThickness="0" />
                         <GridSplitter  HorizontalAlignment="Stretch" VerticalAlignment="Bottom"  Height="2" Panel.ZIndex="9" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1" Background="Gray"  />
                         <GridSplitter  VerticalAlignment="Stretch" Grid.RowSpan="3" Width="2" Panel.ZIndex="9" Grid.Column="0" Grid.Row="0" Background="Gray"  />
                         <GridSplitter  VerticalAlignment="Stretch" Grid.RowSpan="3" Width="2" Panel.ZIndex="9" Grid.Column="1" Grid.Row="0" Background="Gray"  />
@@ -38,7 +38,7 @@
                         <Button Content="软件安装与卸载" Name="Appwiz"  Grid.Row="1"  Grid.Column="0" ToolTip="appwiz.cpl" Click="CmdProcess"/>
                         <Button Content="本地服务"  Name="Services"  Grid.Row="1"  Grid.Column="1" ToolTip="services.msc" Click="CmdProcess"/>
                         <Button Content="控制面板"  Name="Osk"  Grid.Row="1"  Grid.Column="2" ToolTip="control.exe" Click="CmdProcess"/>
-                        <Button Content="事件查看器"  Name="Eventvwr"  Grid.Row="2"  Grid.Column="0" ToolTip="eventvwr.msc" Click="CmdProcess"/>
+                        <Button Content="命令行"  Name="Start"  Grid.Row="2"  Grid.Column="0" ToolTip="Start" Click="CmdProcess"/>
                         <Button Content="任务管理器"   Name="Taskmgr" Grid.Row="2"  Grid.Column="1" ToolTip=" taskmgr" Click="CmdProcess"/>
                         <Button Content="系统属性"  Name="Msinfo32"  Grid.Row="2"  Grid.Column="24" ToolTip="control.exe system" Click="CmdProcess"/>
                     </Grid>
@@ -46,15 +46,15 @@
                 <GroupBox Header="有参数命令" Height="100" VerticalAlignment="Top" DockPanel.Dock="Top">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
                         <ComboBox Name="CmdBox" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Width="120" Margin="0,0,0,0" SelectionChanged="ComboBox_SelectionChanged">
-                            <ComboBoxItem IsSelected="True" ToolTip="目标计算机IP" Tag="ping ">Ping</ComboBoxItem>
-                            <ComboBoxItem ToolTip="目标计算机IP" Tag="mstsc -v " Selected="ComboBoxItem_Selected">远程桌面</ComboBoxItem>
-                            <ComboBoxItem ToolTip="JDK文件夹路径" Tag="mstsc -v " Selected="ComboBoxItem_Selected">Java环境变量</ComboBoxItem>
-                            <ComboBoxItem ToolTip="目标进程的进程号(ID)" Tag="taskkill /t /f /pid ">杀进程(pid)</ComboBoxItem>
-                            <ComboBoxItem ToolTip="目标进程的进程名(如javaw.exe)" Tag="taskkill /t /f /im ">杀进程(进程)</ComboBoxItem>
-                            <ComboBoxItem Tag="	&quot;%SystemRoot%\explorer.exe	&quot; ftp://192.168.1.7" ToolTip="目标FTP服务器IP">FTP</ComboBoxItem>
-                            <ComboBoxItem Tag="netstat -ano " ToolTip="端口号查询">显示所有进程及端口</ComboBoxItem>
-                            <ComboBoxItem Tag="netstat -ano | findstr " ToolTip="端口号查询">查询端口</ComboBoxItem>
-                            <ComboBoxItem Tag="tasklist | findstr " ToolTip="目标进程进程号(PID)">目标进程进程号(PID)</ComboBoxItem>
+                            <ComboBoxItem Name="ping" IsSelected="True" ToolTip="格式：192.168.1.170" Tag="ping ">Ping</ComboBoxItem>
+                            <ComboBoxItem Name="mstsc" ToolTip="格式：192.168.1.170" Tag="mstsc -v " Selected="ComboBoxItem_Selected">远程桌面</ComboBoxItem>
+                            <ComboBoxItem Name="java" ToolTip="格式：C:\Program Files\Java\jdk1.8.0_144" Tag="java" Selected="ComboBoxItem_Selected">Java环境变量</ComboBoxItem>
+                            <ComboBoxItem Name="killpid" ToolTip="格式：10302" Tag="taskkill /t /f /pid ">杀进程(pid)</ComboBoxItem>
+                            <ComboBoxItem Name="killim" ToolTip="格式：javaw.exe" Tag="taskkill /t /f /im ">杀进程(进程)</ComboBoxItem>
+                            <ComboBoxItem Name="ftp" Tag="	&quot;%SystemRoot%\explorer.exe	&quot; ftp://" ToolTip="格式：username:password@hostname:port">FTP</ComboBoxItem>
+                            <ComboBoxItem Name="portall" Tag="netstat -ano " ToolTip="不需要参数">显示所有进程及端口</ComboBoxItem>
+                            <ComboBoxItem Name="port" Tag="netstat -ano | findstr " ToolTip="格式：8080">查询端口</ComboBoxItem>
+                            <ComboBoxItem Name="pid" Tag="tasklist | findstr " ToolTip="格式：10302">目标进程进程号(PID)</ComboBoxItem>
                         </ComboBox>
                        
 
@@ -62,11 +62,11 @@
                                 <ListBox  DisplayMemberPath="IP" SelectedValuePath="IP" Width="{Binding ElementName=Parameter,Path=Width}" x:Name="RecList" SelectionChanged="TipSelected" >
                             </ListBox>
                         </Popup>
-                        <TextBox GotFocus="ShowPopUp" MouseLeave="NotStaysOpen" MouseDoubleClick="ShowPopUp "  HorizontalAlignment="Center"  Name="Parameter" Width="300"  TextChanged="Paramenter_TextChanged"  VerticalAlignment="Bottom"  Margin="140,0,0,0">
+                        <TextBox GotFocus="ShowPopUp" Height="25" MouseLeave="NotStaysOpen" MouseDoubleClick="ShowPopUp "  HorizontalAlignment="Center"  Name="Parameter" Width="330"  TextChanged="Paramenter_TextChanged"  VerticalAlignment="Bottom"  Margin="100,0,0,0">
                             <TextBox.Resources>
                                 <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left">
                                     <VisualBrush.Visual>
-                                        <TextBlock FontStyle="Italic" Text="提示文字"/>
+                                        <TextBlock FontStyle="Italic" Text="{Binding ElementName=CmdBox,Path=SelectedItem.ToolTip}"/>
                                     </VisualBrush.Visual>
                                     
                                 </VisualBrush>
@@ -84,13 +84,14 @@
                                 </Style>
                             </TextBox.Style>
                         </TextBox>
-                        <Button Content="执行"  Name="Submit" Click="Excute" Margin="140,0,0,0" Width="100"/>
+                        <Button Content="执行"  Name="Submit" Click="Excute" Margin="30,0,0,0" Width="100"/>
+                        <Button Content="保存参数"  Name="SavePara1" Click="SavePara" Margin="30,0,0,0" Width="100"/>
                     </StackPanel>
                 </GroupBox>
                 <GroupBox DockPanel.Dock="Left" Header="系统信息" Width="220" HorizontalAlignment="Left" Margin="5 0 0 5 ">
                     <TextBlock Margin="10 15"  LineHeight="37"   Name="SMeta" TextWrapping="Wrap" Text="" />
                 </GroupBox>
-                <GroupBox DockPanel.Dock="Left" Header="执行结果" Width="640" HorizontalAlignment="Right" Margin="0 0 5 5 ">
+                <GroupBox DockPanel.Dock="Right" Header="执行结果" Margin="0 0 5 5 ">
                     <ScrollViewer Name="Screen">
                         <TextBlock Margin="10 15"    LineHeight="37"   Name="Result" TextWrapping="Wrap" Text="" />
                     </ScrollViewer>

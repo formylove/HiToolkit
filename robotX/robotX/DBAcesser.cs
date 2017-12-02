@@ -11,22 +11,9 @@ namespace robotX
 {
     class DBAcesser
     {
-        static  string connUrl = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=Database.accdb;Persist Security Info=False";
-        static string connectionString = @"Data Source=.\SQLEXPRESS;
-                                AttachDbFilename=""Database.accdb"";
-                                Integrated Security=True;
-                                Connect Timeout=30;User Instance=True";
+        static  string connUrl = @"Provider=microsoft.ace.oledb.12.0;Data Source=Database.accdb;Persist Security Info=False";//Microsoft.Jet.OLEDB.4.0
         static  void Main()
         {
-        string query = "insert into IPGroups(ip,name) values('11.11.2.3','圣安')";
-
-        using (OleDbConnection conn = new OleDbConnection(connUrl)){
-                using (OleDbCommand comm = new OleDbCommand(query, conn)) { 
-                        ;
-                        conn.Open();
-                        comm.ExecuteNonQuery();
-                    }
-        }
 
 
         }
@@ -47,10 +34,17 @@ namespace robotX
 
 
         }
-        public int Update(string tName, string condition) {
+        public int Update(string sql) {
 
-
-            return 0;
+            using (OleDbConnection conn = new OleDbConnection(connUrl))
+            {
+                using (OleDbCommand comm = new OleDbCommand(sql, conn))
+                {
+                    conn.Open();
+                    
+                    return comm.ExecuteNonQuery();
+                }
+            }
 
         }
 

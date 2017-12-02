@@ -1,0 +1,52 @@
+﻿<Window x:Class="robotX.Saver"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:robotX"
+        mc:Ignorable="d"
+        Title="..." Height="300" Width="580">
+            <GroupBox Header="保存">
+    <Grid>
+        <StackPanel Orientation="Vertical" >
+            <DockPanel Margin="10" >
+                    <GroupBox Header="参数值">
+                        <TextBlock Name="Para" Width="500" Height="40" FontSize="30" ></TextBlock>
+                    </GroupBox>
+            </DockPanel>
+            <DockPanel Margin="10">
+                    <GroupBox Header="名称" Name="Box" >
+                        <TextBox FontSize="30"  VerticalContentAlignment="Center" DockPanel.Dock="Right" HorizontalAlignment="Center" Height="50" Name="Name" Width="500"  VerticalAlignment="Bottom"  Margin="0,0,0,0">
+                            <TextBox.Resources>
+                                <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left">
+                                    <VisualBrush.Visual>
+                                        <TextBlock FontStyle="Italic" Text="输入 地区 + 医院 + 模块 ， 如东海驼峰His"/>
+                                    </VisualBrush.Visual>
+
+                                </VisualBrush>
+                            </TextBox.Resources>
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Style.Triggers>
+                                        <Trigger Property="Text" Value="{x:Null}">
+                                            <Setter Property="Background" Value="{StaticResource HintText}"/>
+                                        </Trigger>
+                                        <Trigger Property="Text" Value="">
+                                            <Setter Property="Background" Value="{StaticResource HintText}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </GroupBox>
+            </DockPanel>
+                <Button HorizontalAlignment="Center"  BorderThickness="0" Margin="0 20 " Width="180" Height="40" Name="Submit" Click="Save" >
+                   保存参数
+            </Button>
+            
+            
+            
+        </StackPanel>
+    </Grid>
+        </GroupBox>
+</Window>

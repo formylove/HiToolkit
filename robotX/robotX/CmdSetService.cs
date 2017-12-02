@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -30,8 +29,8 @@ namespace robotX
         private DBAcesser accesser = new DBAcesser();
 
         public void Start(Button objButton) {
-            p.Start();//启动程序
-            p.StandardInput.WriteLine(objButton.ToolTip);
+            string para = objButton.ToolTip.ToString();
+            DisplayResult(para);
         }
 
         public void ShuffleList()
@@ -43,15 +42,19 @@ namespace robotX
             recList.DisplayMemberPath = "Para";
             recList.SelectedValuePath = "Para";
         }
+        public void SavePara()
+        {
+          
+        }
         public void ShuffleList(string acronym)
         {
-            string query = "select top 6 IP,IP & '      ' & Name as fullName from  ipgroups i  where capital like '{0}%' or capital like '%{0}%' or  ip like '{0}%' or ip like '%{0}%' ";
+            string query = "select top 6 Para,Para & '      ' & Tag as fullName from  Parameter i  where capital like '{0}%' or capital like '%{0}%' or  Para like '{0}%' or Para like '%{0}%' ";
             query = String.Format(query,acronym);
             ListBox recList = (ListBox)w.FindName("RecList");
             System.Data.DataView dv = accesser.FetchDataSet(query).DefaultView;
             recList.ItemsSource = dv;
             recList.DisplayMemberPath = "fullName";
-            recList.SelectedValuePath = "IP";
+            recList.SelectedValuePath = "Para";
         }
         public  CmdSetService(Window w) {
             this.w = w;
@@ -72,72 +75,81 @@ namespace robotX
             p.StartInfo.RedirectStandardError = true;
             p.StartInfo.UseShellExecute = false;              //是否指定操作系统外壳进程启动程序，这里需为false  
             p.StartInfo.RedirectStandardOutput = true;// 设置为 true
-
+            p.Start();
 
 
 
         }
         public void Excute()
         {
-            string para = ((ComboBoxItem)((ComboBox)w.FindName("CmdBox")).SelectedItem).Tag.ToString() + (((TextBox)w.FindName("Parameter")).Text).Trim() + "&exit";
-
-            p.Start();//启动程序
-            p.StandardInput.WriteLine(para);
-            p.StandardInput.Flush();
-            p.StandardInput.AutoFlush = true;
-            string result = p.StandardOutput.ReadToEnd() + p.StandardError.ReadToEnd();
-            result = result.Replace("\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n").Replace("&exit", "");
-            ((TextBlock)w.FindName("Result")).Text = result;
-            p.WaitForExit();//等待程序执行完退出进程
-            //p.Close();
-        }
-        public void SetSysMeta()
-        {
-            TextBlock sMeta = (TextBlock)w.FindName("SMeta");
-            String IPAddress = (new System.Net.IPAddress(Dns.GetHostByName(Dns.GetHostName()).AddressList[0].Address)).ToString();//获取本机的IP地址
-            sMeta.Text += "IP地址   ：" + IPAddress + Environment.NewLine;
-            if (Environment.Is64BitOperatingSystem)
+            string parameter = ((TextBox)w.FindName("Parameter")).Text;
+            parameter = (parameter != null) ? parameter.Trim().Replace(" ", "") : parameter;
+            string tag = ((ComboBoxItem)((ComboBox)w.FindName("CmdBox")).SelectedItem).Tag.ToString();
+            if (parameter != null && parameter.Length>0)
             {
-                sMeta.Text += "系统位数：:64位" + Environment.NewLine;
+                if (tag.Equals("java"))
+                {
+                    SetPath();
+                }
+                else
+                {
+            string para = tag + parameter.Trim();
+                    if (Regex.IsMatch(parameter, CommonTool.IPReg) || Regex.IsMatch(parameter, CommonTool.UrlReg) || Regex.IsMatch(parameter, @"[0-9]+") || (((ComboBoxItem) w.FindName("ftp")).IsSelected && Regex.IsMatch(parameter, CommonTool.FTPReg)))
+                    {
+                        string sql = String.Format("insert into latestused(para) values('{0}')",parameter);
+                        accesser.Update(sql);
+                    }
+            DisplayResult(para);
+            //p.Close();
+            }
             }
             else
             {
-                sMeta.Text += "系统位数：32位" + Environment.NewLine;
+                MessageBox.Show("参数为空");
             }
-            sMeta.Text += "计算机名：" + Environment.MachineName + Environment.NewLine;
-            sMeta.Text += "用户名   ：" + Environment.UserName + Environment.NewLine;
-            sMeta.Text += "操作系统：" + Environment.OSVersion.Platform + Environment.NewLine;
-            sMeta.Text += "版本号  ：" + Environment.OSVersion.VersionString + Environment.NewLine;
+        }
+        private void DisplayResult(string para)
+        {
+            p.StandardInput.WriteLine(para + "&exit");
+            p.StandardInput.Flush();
+            p.StandardInput.AutoFlush = true;
+            //string result = p.StandardOutput.ReadToEnd() + p.StandardError.ReadToEnd();
+            StreamReader reader = p.StandardOutput;
+            string result = reader.ReadLine();
+            while (!reader.EndOfStream)
+            {
+                string temp = reader.ReadLine();
+                //if (!(temp.Contains("保留所有权利") || temp.Contains("DNS后缀") || temp.Contains("IPv6地址") || temp.Contains("媒体状态") || temp.Contains("Windows IP配置") || temp.Contains("版权所有") || temp.Contains("Windows IP Configuration") || temp.Contains("Windows IP 设置") || temp.Contains("DNS Suffix")) )
+                //{
 
-            //String hostInfo = Dns.GetHostName();//获取本机的计算机名  
-            //richTextBox1.AppendText("计算机名:" + SystemInformation.ComputerName);
-            //richTextBox1.AppendText(Environment.NewLine);//换行  
-            //richTextBox1.AppendText("计算机名:" + Environment.MachineName);
-            //richTextBox1.AppendText(Environment.NewLine);
-            //richTextBox1.AppendText("操作系统:" + Environment.OSVersion.Platform);
-            //richTextBox1.AppendText(Environment.NewLine);
-            //richTextBox1.AppendText("版本号:" + Environment.OSVersion.VersionString);
-            //richTextBox1.AppendText(Environment.NewLine);
-            //richTextBox1.AppendText("处理器个数:" + Environment.ProcessorCount);
+                    result += reader.ReadLine()+"\r";
+                //}
+
+            }
+            result += p.StandardError.ReadToEnd();
+            ((TextBlock)w.FindName("Result")).Text = result;
+            p.WaitForExit();//等待程序执行完退出进程
+
 
         }
 
-        private void SetPath(object sender, RoutedEventArgs e)
+        private void SetPath()
         {
             try
             {
 
                 string parameter = ((TextBox)w.FindName("Parameter")).Text;
-                if (Regex.IsMatch(parameter, @"^[a-zA-Z]:(((\\(?! )[^/:*?<>\""|\\]+)+\\?)|(\\)?)\s*$"))
+                parameter = (parameter != null) ? parameter.Trim().Replace(" ", "") : parameter;
+                if (parameter != null && Regex.IsMatch(parameter, CommonTool.UrlReg))
                 {
-
+                    Environment.SetEnvironmentVariable("JAVA_HOME", parameter, EnvironmentVariableTarget.Machine);
                     Environment.SetEnvironmentVariable("CLASSPATH", @".;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;", EnvironmentVariableTarget.Machine);
                     Add2Path();
-
+                    DisplayResult("java -version");
                 }
                 else
                 {
-                    MessageBox.Show("非有效的Java程序的安装路径");
+                    MessageBox.Show("非有效的Java程序的安装路径(例如 C:\\Program Files\\Java\\jdk1.8.0_144)");
 
                 }
             }
@@ -156,7 +168,7 @@ namespace robotX
 
             foreach (string item in list)
             {
-                if (item == pathValue)
+                if (item.Equals(pathValue))
                     isPathExist = true;
             }
             if (!isPathExist)
@@ -165,7 +177,34 @@ namespace robotX
             }
         }
 
+        public void SetSysMeta()
+        {
+            TextBlock sMeta = (TextBlock)w.FindName("SMeta");
+            String IPAddress = (new System.Net.IPAddress(Dns.GetHostByName(Dns.GetHostName()).AddressList[0].Address)).ToString();//获取本机的IP地址
+            sMeta.Text += "IP地址   ：" + IPAddress + Environment.NewLine;
+            if (IntPtr.Size == 8)//Environment.Is64BitOperatingSystem .NET 4.0使用
+            {
+                sMeta.Text += "系统位数：:64位" + Environment.NewLine;
+            }
+            else
+            {
+                sMeta.Text += "系统位数：32位" + Environment.NewLine;
+            }
+            sMeta.Text += "计算机名：" + Environment.MachineName + Environment.NewLine;
+            sMeta.Text += "用户名   ：" + Environment.UserName + Environment.NewLine;
 
+            //String hostInfo = Dns.GetHostName();//获取本机的计算机名  
+            //richTextBox1.AppendText("计算机名:" + SystemInformation.ComputerName);
+            //richTextBox1.AppendText(Environment.NewLine);//换行  
+            //richTextBox1.AppendText("计算机名:" + Environment.MachineName);
+            //richTextBox1.AppendText(Environment.NewLine);
+            //richTextBox1.AppendText("操作系统:" + Environment.OSVersion.Platform);
+            //richTextBox1.AppendText(Environment.NewLine);
+            //richTextBox1.AppendText("版本号:" + Environment.OSVersion.VersionString);
+            //richTextBox1.AppendText(Environment.NewLine);
+            //richTextBox1.AppendText("处理器个数:" + Environment.ProcessorCount);
+
+        }
 
 
 

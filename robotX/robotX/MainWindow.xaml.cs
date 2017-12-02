@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -73,22 +72,6 @@ namespace robotX
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         private void HisIP_TextChanged(object sender, TextChangedEventArgs e)
         {
          
@@ -133,8 +116,15 @@ namespace robotX
                 acronym = CommonTool.CaptureUpperCase(input);
                 cmdService.ShuffleList(acronym);
             }
-            this.Popup.StaysOpen = true;
+            int count = this.RecList.Items.Count;
+            if (count > 0)
+            {
             this.Popup.IsOpen = true;
+            }
+            else
+            {
+                this.Popup.IsOpen = false;
+            }
         }
 
         private void TipSelected(object sender, SelectionChangedEventArgs e)
@@ -149,15 +139,39 @@ namespace robotX
         void ShowPopUp(object sender, object e)
         {
             cmdService.ShuffleList();
-           
-            this.Popup.StaysOpen = true;
-            this.Popup.IsOpen = true;
+            int count = this.RecList.Items.Count;
+            if (count > 0)
+            {
+                this.Popup.StaysOpen = true;
+                this.Popup.IsOpen = true;
+            }
+            else
+            {
+                this.Popup.IsOpen = false;
+            }
         }
         void HidePopUp(object sender, object e)
         {
-            this.Result.Text += this.Popup.IsOpen;
             this.Popup.IsOpen = false;
 
+        }
+        void SavePara(object sender, object e)
+        {
+            string parameter = (this.Parameter.Text != null)?this.Parameter.Text.Trim().Replace(" ",""): this.Parameter.Text;
+            if (parameter == null || parameter.Length == 0 )
+            {
+                MessageBox.Show("参数输入框为空，无法保存参数");
+            }
+            else if(!(Regex.IsMatch(parameter, CommonTool.IPReg) || Regex.IsMatch(parameter, CommonTool.UrlReg) || Regex.IsMatch(parameter, @"[0-9]+") || (this.ftp.IsSelected && Regex.IsMatch(parameter, CommonTool.FTPReg))))
+            {
+                MessageBox.Show("参数格式错误");
+            }
+            else
+            {
+            Saver saver = new Saver();
+            saver.Parameter = parameter;
+            saver.ShowDialog();
+            }
         }
         void NotStaysOpen(object sender, object e)
         {
@@ -171,33 +185,6 @@ namespace robotX
         }
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            switch (this.CmdBox.SelectedIndex)
-            {
-                case 0:
-
-                    break;
-                case 1:
-
-                    break;
-                case 2:
-
-                    break;
-                case 3:
-
-                    break;
-                case 4:
-
-                    break;
-                case 5:
-
-                    break;
-
-
-
-
-
-
-            }
 
         }
     }

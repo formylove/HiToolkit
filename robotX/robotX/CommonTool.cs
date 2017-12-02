@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace robotX
 {
     class CommonTool
     {
+        public const string UrlReg = @"^[a-zA-Z]:(((\\(?! )[^/:*?<>\""|\\]+)+\\?)|(\\)?)\s*$";
+        public const string IPReg = @"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$";
+        public const string FTPReg = "^ ((.+):(.+)@)?" + IPReg + "(:[0-9]+)?$";
         static public string CaptureUpperCase(string CnStr)
         {
 
