@@ -16,9 +16,8 @@ using System.Xml;
 using System.Net;
 using System.IO;
 using System.Text.RegularExpressions;
-
-
-
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace robotX
 {
@@ -35,7 +34,7 @@ namespace robotX
 
         public void ShuffleList()
         {
-            string query = "select top 4 Para from  LatestUsed l order by l.stamp desc";
+            string query = "select top 4  Para from  LatestUsed l order by l.stamp desc";
             ListBox recList = (ListBox)w.FindName("RecList");
             System.Data.DataView dv = accesser.FetchDataSet(query).DefaultView;
             recList.ItemsSource = dv;
@@ -75,7 +74,7 @@ namespace robotX
             p.StartInfo.RedirectStandardError = true;
             p.StartInfo.UseShellExecute = false;              //是否指定操作系统外壳进程启动程序，这里需为false  
             p.StartInfo.RedirectStandardOutput = true;// 设置为 true
-            p.Start();
+            
 
 
 
@@ -93,23 +92,42 @@ namespace robotX
                 }
                 else
                 {
-            string para = tag + parameter.Trim();
-                    if (Regex.IsMatch(parameter, CommonTool.IPReg) || Regex.IsMatch(parameter, CommonTool.UrlReg) || Regex.IsMatch(parameter, @"[0-9]+") || (((ComboBoxItem) w.FindName("ftp")).IsSelected && Regex.IsMatch(parameter, CommonTool.FTPReg)))
-                    {
-                        string sql = String.Format("insert into latestused(para) values('{0}')",parameter);
-                        accesser.Update(sql);
-                    }
-            DisplayResult(para);
-            //p.Close();
-            }
+
+                    string para = tag + parameter.Trim();
+                    DisplayResult(para);
+                    //p.Close();
+                    Thread t = new Thread(new ParameterizedThreadStart(UpdateLUsed));
+                    t.Start(parameter);
+                }
             }
             else
             {
                 MessageBox.Show("参数为空");
             }
         }
+        private void UpdateLUsed(object data )
+        {
+            string parameter = data as string;
+            string sql;
+            if (Regex.IsMatch(parameter, CommonTool.IPReg) || Regex.IsMatch(parameter, CommonTool.UrlReg) || Regex.IsMatch(parameter, @"[0-9]+") || (((ComboBoxItem)w.FindName("ftp")).IsSelected && Regex.IsMatch(parameter, CommonTool.FTPReg)))
+            {
+                bool isDuplicated = accesser.GetCount( String.Format("select count(*) from latestused where para = '{0}'",parameter)) > 0 ;
+                if (isDuplicated)
+                {
+                sql = String.Format("update latestused set para = '{0}',stamp=now() where para = '{0}'", parameter); ;
+                }
+                else
+                {
+                sql = String.Format("insert into latestused(para) values('{0}')", parameter);
+                }
+                accesser.Update(sql);
+                sql = "delete * from latestused where para not in (select top 6 para from latestused order by stamp desc)";
+                accesser.Update(sql);
+            }
+        }
         private void DisplayResult(string para)
         {
+            p.Start();
             p.StandardInput.WriteLine(para + "&exit");
             p.StandardInput.Flush();
             p.StandardInput.AutoFlush = true;
@@ -119,15 +137,25 @@ namespace robotX
             while (!reader.EndOfStream)
             {
                 string temp = reader.ReadLine();
-                //if (!(temp.Contains("保留所有权利") || temp.Contains("DNS后缀") || temp.Contains("IPv6地址") || temp.Contains("媒体状态") || temp.Contains("Windows IP配置") || temp.Contains("版权所有") || temp.Contains("Windows IP Configuration") || temp.Contains("Windows IP 设置") || temp.Contains("DNS Suffix")) )
-                //{
+                bool s = temp.Contains("DNS 后缀");
+                bool isShown = !(temp.Contains("保留所有权利") || temp.Contains("DNS 后缀") || temp.Contains("IPv6 地址") || temp.Contains("媒体状态") || temp.Contains("Windows IP 配置") || temp.Contains("版权所有") || temp.Contains("Windows IP Configuration") || temp.Contains("DNS Suffix"));
+                if (isShown)
+                {
+                    if (temp.Contains("IPv4"))
+                    {
+                    result += "*************" + temp  + "****************"  + "\r\n";
 
-                    result += reader.ReadLine()+"\r";
-                //}
+                    }
+                    else
+                    {
+
+                    result += temp + "\r\n";
+                    }
+                }
 
             }
             result += p.StandardError.ReadToEnd();
-            ((TextBlock)w.FindName("Result")).Text = result;
+            ((TextBlock)w.FindName("Result")).Text = result.Replace("\r\n\r\n", "\r\n").Replace("\r\n\r\n", "\r\n").Replace("&exit", ""); ;
             p.WaitForExit();//等待程序执行完退出进程
 
 

@@ -17,7 +17,7 @@ namespace robotX
 
 
         }
-       public  DataTable FetchDataSet (string query)
+        public DataTable FetchDataSet(string query)
         {
             using (OleDbConnection conn = new OleDbConnection(connUrl))
             {
@@ -29,6 +29,19 @@ namespace robotX
                     DataTable dt = new DataTable();
                     adp.Fill(dt);
                     return dt;
+                }
+            }
+
+
+        }
+        public int GetCount(string query)
+        {
+            using (OleDbConnection conn = new OleDbConnection(connUrl))
+            {
+                using (OleDbCommand comm = new OleDbCommand(query, conn))
+                {
+                    conn.Open();
+                    return (int)comm.ExecuteScalar();
                 }
             }
 

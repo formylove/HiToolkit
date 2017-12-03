@@ -11,7 +11,9 @@
         <StackPanel Orientation="Vertical" >
             <DockPanel Margin="10" >
                     <GroupBox Header="参数值">
-                        <TextBlock Name="Para" Width="500" Height="40" FontSize="30" ></TextBlock>
+                        <TextBlock Name="Para" Width="500" Height="40" FontSize="30" >
+                            
+                        </TextBlock>
                     </GroupBox>
             </DockPanel>
             <DockPanel Margin="10">

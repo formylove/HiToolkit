@@ -95,11 +95,6 @@ namespace robotX
 
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-
-        }
-
 
 
         private void ComboBoxItem_Selected(object sender, RoutedEventArgs e)
