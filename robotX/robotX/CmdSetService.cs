@@ -88,7 +88,7 @@ namespace robotX
             {
                 if (tag.Equals("java"))
                 {
-                    SetPath();
+                    SetEnvironmentVariable();
                 }
                 else
                 {
@@ -161,19 +161,19 @@ namespace robotX
 
         }
 
-        private void SetPath()
+        private void SetEnvironmentVariable()
         {
             try
             {
 
                 string parameter = ((TextBox)w.FindName("Parameter")).Text;
-                parameter = (parameter != null) ? parameter.Trim().Replace(" ", "") : parameter;
+                parameter = (parameter != null) ? parameter.Trim() : parameter;
                 if (parameter != null && Regex.IsMatch(parameter, CommonTool.UrlReg))
                 {
                     Environment.SetEnvironmentVariable("JAVA_HOME", parameter, EnvironmentVariableTarget.Machine);
                     Environment.SetEnvironmentVariable("CLASSPATH", @".;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;", EnvironmentVariableTarget.Machine);
                     Add2Path();
-                    DisplayResult("java -version");
+                    DisplayResult("javac");
                 }
                 else
                 {
@@ -202,17 +202,17 @@ namespace robotX
             if (!isPathExist)
             {
                 Environment.SetEnvironmentVariable("PATH", pathValue + ";" + pathlist, EnvironmentVariableTarget.Machine);
-            }
-        }
+           }
 
+        }
         public void SetSysMeta()
         {
             TextBlock sMeta = (TextBlock)w.FindName("SMeta");
             String IPAddress = (new System.Net.IPAddress(Dns.GetHostByName(Dns.GetHostName()).AddressList[0].Address)).ToString();//获取本机的IP地址
             sMeta.Text += "IP地址   ：" + IPAddress + Environment.NewLine;
-            if (IntPtr.Size == 8)//Environment.Is64BitOperatingSystem .NET 4.0使用
+            if (Environment.Is64BitOperatingSystem)//Environment.Is64BitOperatingSystem .NET 4.0使用
             {
-                sMeta.Text += "系统位数：:64位" + Environment.NewLine;
+                sMeta.Text += "系统位数：64位" + Environment.NewLine;
             }
             else
             {
@@ -244,3 +244,4 @@ namespace robotX
 
     }
 }
+
