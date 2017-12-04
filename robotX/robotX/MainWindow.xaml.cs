@@ -157,7 +157,7 @@ namespace robotX
             {
                 MessageBox.Show("参数输入框为空，无法保存参数");
             }
-            else if(!(Regex.IsMatch(parameter, CommonTool.IPReg) || Regex.IsMatch(parameter, CommonTool.UrlReg) || Regex.IsMatch(parameter, @"[0-9]+") || (this.ftp.IsSelected && Regex.IsMatch(parameter, CommonTool.FTPReg))))
+            else if(!(Regex.IsMatch(parameter, CommonTool.IPReg) || Regex.IsMatch(parameter, "^.+\\.exe$") || Regex.IsMatch(parameter, CommonTool.UrlReg) || Regex.IsMatch(parameter, @"[0-9]+") || (this.ftp.IsSelected && Regex.IsMatch(parameter, CommonTool.FTPReg))))
             {
                 MessageBox.Show("参数格式错误");
             }

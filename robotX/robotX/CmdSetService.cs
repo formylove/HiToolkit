@@ -109,7 +109,7 @@ namespace robotX
         {
             string parameter = data as string;
             string sql;
-            if (Regex.IsMatch(parameter, CommonTool.IPReg) || Regex.IsMatch(parameter, CommonTool.UrlReg) || Regex.IsMatch(parameter, @"[0-9]+") || (((ComboBoxItem)w.FindName("ftp")).IsSelected && Regex.IsMatch(parameter, CommonTool.FTPReg)))
+            if (Regex.IsMatch(parameter, CommonTool.IPReg) || Regex.IsMatch(parameter, " ^.+\\.exe$") || Regex.IsMatch(parameter, CommonTool.UrlReg) || Regex.IsMatch(parameter, @"[0-9]+") || (((ComboBoxItem)w.FindName("ftp")).IsSelected && Regex.IsMatch(parameter, CommonTool.FTPReg)))
             {
                 bool isDuplicated = accesser.GetCount( String.Format("select count(*) from latestused where para = '{0}'",parameter)) > 0 ;
                 if (isDuplicated)
