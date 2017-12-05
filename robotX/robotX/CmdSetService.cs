@@ -209,7 +209,8 @@ namespace robotX
         {
             TextBlock sMeta = (TextBlock)w.FindName("SMeta");
             String IPAddress = (new System.Net.IPAddress(Dns.GetHostByName(Dns.GetHostName()).AddressList[0].Address)).ToString();//获取本机的IP地址
-            sMeta.Text += "IP地址   ：" + IPAddress + Environment.NewLine;
+            sMeta.Text += "内网IP   ：" + CommonTool.LocalIP + Environment.NewLine;
+            sMeta.Text += "外网IP   ：" + IPAddress + Environment.NewLine;
             if (Environment.Is64BitOperatingSystem)//Environment.Is64BitOperatingSystem .NET 4.0使用
             {
                 sMeta.Text += "系统位数：64位" + Environment.NewLine;

@@ -99,107 +99,61 @@
             </DockPanel>
         </TabItem>
         <TabItem Header=" LIS一键配置" Height="21" VerticalAlignment="Top">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="70*"/>
-                    <RowDefinition Height="19*"/>
-                    <RowDefinition Height="52*"/>
-                    <RowDefinition Height="73*"/>
-                    <RowDefinition Height="94*"/>
-                    <RowDefinition Height="82*"/>
-                    <RowDefinition Height="217*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*" />
-                    <ColumnDefinition Width="7*"/>
-                    <ColumnDefinition Width="7*"/>
-                    <ColumnDefinition Width="104*"/>
-                    <ColumnDefinition Width="245*"/>
-                    <ColumnDefinition Width="114*"/>
-                    <ColumnDefinition Width="126*"/>
-                    <ColumnDefinition Width="280*"/>
-                </Grid.ColumnDefinitions>
-                <GroupBox Grid.ColumnSpan="4" Header="GroupBox" HorizontalAlignment="Left" Height="100" Grid.RowSpan="3" VerticalAlignment="Top" Width="100">
+            <StackPanel>
 
+                <GroupBox Header="HIS配置" Grid.Row="0">
+                    <StackPanel Name="HISPanel" Orientation="Horizontal" Margin="0 30 0 10 ">
+                        <Label >IP</Label>
+                        <TextBox Name="HisIP"  HorizontalAlignment="Left" Margin="10 0 0 0 "  Height="33"  TextWrapping="Wrap" Text=""   Width="130"  />
+                        <Label Name="UserL" Margin="50 0 0 0 "    >用户</Label>
+                        <TextBox Name="HisDBPSW" HorizontalAlignment="Left" Margin="{Binding ElementName=HisIP,Path=Margin}"  TextWrapping="Wrap" Text=""  Width="{Binding ElementName=HisIP,Path=Width}"  Height="{Binding ElementName=HisIP,Path=Height}"  />
+                        <Label  Margin="{Binding ElementName=UserL,Path=Margin}">密码</Label>
+                        <TextBox Name="HisDBUser" HorizontalAlignment="Left"  Margin="{Binding ElementName=HisIP,Path=Margin}" Width="{Binding ElementName=HisIP,Path=Width}"  Height="{Binding ElementName=HisIP,Path=Height}"/>
+                        <Label  Margin="{Binding ElementName=UserL,Path=Margin}">实例名</Label>
+                        <TextBox Name="HisORCLInstance" HorizontalAlignment="Left"  Margin="{Binding ElementName=HisIP,Path=Margin}" Width="{Binding ElementName=HisIP,Path=Width}"  Height="{Binding ElementName=HisIP,Path=Height}"/>
+                    </StackPanel>
                 </GroupBox>
-                <TextBlock HorizontalAlignment="Left" Height="26" Margin="0,4,0,0" TextWrapping="Wrap" Text="IP" VerticalAlignment="Top" Width="99" RenderTransformOrigin="1.822,6.278" TextAlignment="Center" Grid.Column="4" Grid.Row="1" Grid.RowSpan="2"/>
-                <Button Content="配置" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="107,106,0,0" Click="Button_Click" Grid.Column="7" Height="19" Grid.Row="6"/>
-                <TextBox Name="HisIP"  HorizontalAlignment="Left" Height="26" Margin="0,28,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="218" TextChanged="HisIP_TextChanged" Grid.Column="4" Grid.Row="2" Grid.RowSpan="2"/>
-                <TextBox Name="UnitsCode" HorizontalAlignment="Left" Margin="0,0,0,28" TextWrapping="Wrap" Text="" Width="218" Height="30" VerticalAlignment="Bottom" TextChanged="TextBox_TextChanged" Grid.Column="4" Grid.Row="5"/>
-                <TextBox Name="TomcatPort" HorizontalAlignment="Left" Height="26" Margin="2,49,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="93" Grid.Column="5" Grid.Row="5"/>
-                <TextBox Name="HisDBPSW" HorizontalAlignment="Left" Height="26" Margin="19,28,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="96" Grid.Column="6" Grid.Row="2" Grid.RowSpan="2"/>
-                <TextBox Name="HisDBUser" HorizontalAlignment="Left" Height="26" Margin="2,28,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="93" TextChanged="TextBox_TextChanged" Grid.Column="5" Grid.Row="2" Grid.RowSpan="2"/>
-                <TextBox Name="LisIP" HorizontalAlignment="Left" Height="26" Margin="0,11,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="218" Grid.Column="4" Grid.Row="3"/>
-                <TextBox Name="LisDBPSW" HorizontalAlignment="Left" Height="26" Margin="21,11,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="96" Grid.Column="6" Grid.Row="3"/>
-                <TextBox Name="LisDBUser" HorizontalAlignment="Left" Height="26" Margin="2,11,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="93" Grid.Column="5" Grid.Row="3"/>
-                <TextBlock HorizontalAlignment="Left" Height="26" Margin="2,4,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="99" RenderTransformOrigin="1.822,6.278" Grid.Column="5" Grid.Row="1" Grid.RowSpan="2"><Run Text="数据库"/><Run Text="用户名"/></TextBlock>
-                <TextBlock HorizontalAlignment="Left" Height="26" Margin="19,3,0,0" TextWrapping="Wrap" Text="密码" VerticalAlignment="Top" Width="99" RenderTransformOrigin="1.822,6.278" Grid.Column="6" Grid.Row="1" Grid.RowSpan="2"/>
-                <TextBox Name="HisORCLInstance" HorizontalAlignment="Left" Height="26" Margin="17,29,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="96" Grid.Column="7" Grid.Row="2" Grid.RowSpan="2"/>
-                <TextBox Name="LisORCLInstance" HorizontalAlignment="Left" Height="26" Margin="17,11,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="96" Grid.Column="7" Grid.Row="3"/>
-                <TextBlock HorizontalAlignment="Left" Height="21" Margin="3,180,0,0" TextWrapping="Wrap" Text="本地IP：" VerticalAlignment="Top" Width="110" Grid.ColumnSpan="2" Grid.Row="6" Grid.Column="3"/>
-                <TextBox Name="MatrixIP" HorizontalAlignment="Left" Height="26" Margin="0,47,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="218" Grid.Column="4" Grid.Row="4"/>
-                <TextBox Name="MatrixPort" HorizontalAlignment="Left" Height="26" Margin="2,47,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="93" Grid.Column="5" Grid.Row="4"/>
-                <TextBlock HorizontalAlignment="Left" Height="26" Margin="3,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="99" RenderTransformOrigin="1.822,6.278" Grid.Column="5" Grid.Row="4"><Run Text="      "/><Run Text="端口"/><Run Text="号"/></TextBlock>
-                <TextBlock HorizontalAlignment="Left" Height="26" Margin="8,14,0,0" TextWrapping="Wrap" Text="医院代码" VerticalAlignment="Top" Width="99" RenderTransformOrigin="1.822,6.278" TextAlignment="Center" Grid.Column="4" Grid.Row="5"/>
-                <TextBlock HorizontalAlignment="Left" Height="26" Margin="2,14,0,0" TextWrapping="Wrap" Text="Tomcat端口" VerticalAlignment="Top" Width="99" RenderTransformOrigin="1.822,6.278" Grid.Column="5" Grid.Row="5"/>
-                <Label Content="Matrix" HorizontalAlignment="Left" Height="24" Margin="56,49,0,0" VerticalAlignment="Top" Width="70" Grid.ColumnSpan="2" Grid.Row="4" Grid.Column="3"/>
-                <Label Content="Matrix" HorizontalAlignment="Left" Height="24" Margin="56,49,0,0" VerticalAlignment="Top" Width="70" Grid.ColumnSpan="2" Grid.Row="4" Grid.Column="3"/>
-                <Label Content="Lis" HorizontalAlignment="Left" Height="24" Margin="53,11,0,0" VerticalAlignment="Top" Width="70" FontWeight="Bold" Grid.ColumnSpan="2" Grid.Row="3" Grid.Column="3"/>
-                <Label Content="His" HorizontalAlignment="Left" Height="24" Margin="53,31,0,0" VerticalAlignment="Top" Width="70" FontWeight="Bold" Grid.ColumnSpan="2" Grid.Row="2" Grid.RowSpan="2" Grid.Column="3"/>
-                <TextBlock Name="LocalIP" Grid.Column="4" HorizontalAlignment="Left" Height="21" Margin="10,130,0,0" Grid.Row="6" TextWrapping="Wrap" Text=""  VerticalAlignment="Top" Width="177"/>
-                <Label Content="实例名" HorizontalAlignment="Left" Height="24" Margin="43,1,0,0" VerticalAlignment="Top" Width="70" Grid.Column="7" Grid.RowSpan="2" Grid.Row="1"/>
-                <Button Name="CopyB" Content="↓↓↓ 复制 ↓↓↓" Grid.Column="4" HorizontalAlignment="Left" Margin="78,18,0,0" Grid.Row="4" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.16,-0.158" Click="Button_Click_1" Height="19"/>
-                <CheckBox Name="IsNewHIS" Content="新HIS" Grid.Column="6" HorizontalAlignment="Left" Margin="21,49,0,0" Grid.Row="5" VerticalAlignment="Top" Height="26" Width="80" IsChecked="True"/>
-                <StatusBar Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="22" Margin="3,151,0,0" Grid.Row="6" VerticalAlignment="Top" Width="531" Grid.Column="3"/>
-                <Popup>
-                    <Grid Background="#FFE5E5E5" Height="100" Width="100"/>
-                </Popup>
-
-            </Grid>
+                <GroupBox Header="LIS配置" Grid.Row="0">
+                    <StackPanel  Orientation="Horizontal"  Margin="{Binding ElementName=HISPanel,Path=Margin}">
+                        <Label >IP</Label>
+                        <TextBox Name="LisIP"  HorizontalAlignment="Left" Margin="{Binding ElementName=HisIP,Path=Margin}" TextWrapping="Wrap" Text=""   Width="{Binding ElementName=HisIP,Path=Width}" Height="{Binding ElementName=HisIP,Path=Height}" />
+                        <Label Name="UserLL" Margin="{Binding ElementName=UserL,Path=Margin}"    >用户</Label>
+                        <TextBox Name="LisDBPSW" HorizontalAlignment="Left" Margin="{Binding ElementName=HisIP,Path=Margin}"  TextWrapping="Wrap" Text=""  Width="{Binding ElementName=HisIP,Path=Width}"  Height="{Binding ElementName=HisIP,Path=Height}"  />
+                        <Label  Margin="{Binding ElementName=UserL,Path=Margin}">密码</Label>
+                        <TextBox Name="LisDBUser" HorizontalAlignment="Left"  Margin="{Binding ElementName=HisIP,Path=Margin}" Width="{Binding ElementName=HisIP,Path=Width}"  Height="{Binding ElementName=HisIP,Path=Height}"/>
+                        <Label  Margin="{Binding ElementName=UserL,Path=Margin}">实例名</Label>
+                        <TextBox Name="LisORCLInstance" HorizontalAlignment="Left"  Margin="{Binding ElementName=HisIP,Path=Margin}" Width="{Binding ElementName=HisIP,Path=Width}"  Height="{Binding ElementName=HisIP,Path=Height}"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Matrix 配置" Grid.Row="0">
+                    <StackPanel Orientation="Horizontal" Margin="{Binding ElementName=HISPanel,Path=Margin}">
+                        <Label >IP</Label>
+                        <TextBox Name="MatrixIP"  HorizontalAlignment="Left" Margin="{Binding ElementName=HisIP,Path=Margin}"  Height="{Binding ElementName=HisIP,Path=Height}"  TextWrapping="Wrap" Text=""   Width="{Binding ElementName=HisIP,Path=Width}"/>
+                        <Label  Margin="{Binding ElementName=UserL,Path=Margin}"    >端口</Label>
+                        <TextBox Name="MatrixPort" HorizontalAlignment="Left" Margin="{Binding ElementName=HisIP,Path=Margin}"  TextWrapping="Wrap" Text=""  Width="{Binding ElementName=HisIP,Path=Width}"  Height="{Binding ElementName=HisIP,Path=Height}"  />
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="其他 配置" Grid.Row="0">
+                    <StackPanel Orientation="Horizontal"  Margin="{Binding ElementName=HISPanel,Path=Margin}">
+                        <Label >单位编码</Label>
+                        <TextBox Name="UnitsCode"  HorizontalAlignment="Left" Margin="{Binding ElementName=HisIP,Path=Margin}" Height="{Binding ElementName=HisIP,Path=Height}"  TextWrapping="Wrap" Text=""   Width="{Binding ElementName=HisIP,Path=Width}"  />
+                        <Label  Margin="{Binding ElementName=UserL,Path=Margin}"    >Tomcat 端口</Label>
+                        <TextBox Name="TomcatPort" HorizontalAlignment="Left" Margin="{Binding ElementName=HisIP,Path=Margin}"  TextWrapping="Wrap" Text=""  Width="{Binding ElementName=HisIP,Path=Width}"  Height="{Binding ElementName=HisIP,Path=Height}"  />
+                        <CheckBox Name="IsNewHIS" Margin="{Binding ElementName=UserL,Path=Margin}" VerticalAlignment="Center" Content="是否使用新HIS？"   IsChecked="True"/>
+                    </StackPanel>
+                </GroupBox>
+                <StackPanel Orientation="Horizontal" Margin="0 30 0 10 ">
+                    <ComboBox Name="UnitLis" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Width="120" Margin="0,0,0,0" SelectionChanged="ComboBox_SelectionChanged">
+                    </ComboBox>
+                    <Button  Name="DefaultFullFill" Click="Button_FullFill" Margin="100 0 0 0" Width="100">填充</Button>
+                    <Button  Click="Button_Save" Margin="{Binding ElementName=DefaultFullFill,Path=Margin}" Width="{Binding ElementName=DefaultFullFill,Path=Width}">保存配置</Button>
+                    <Button  Click="Button_Click"  Margin="{Binding Margin, ElementName=DefaultFullFill}" Width="{Binding Width, ElementName=DefaultFullFill}" Content="执行部署"/>
+                </StackPanel>
+            </StackPanel>
             <!--添加其余的TabItem-->
         </TabItem>
-        <TabItem Header="Java环境变量">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="17*"/>
-                    <ColumnDefinition Width="41*"/>
-                    <ColumnDefinition Width="828*"/>
-                </Grid.ColumnDefinitions>
-                <CheckBox Name="PCheckBox" Margin="10,10,0,0"
-          Content="Popup Window" Grid.ColumnSpan="3"/>
-                <Button HorizontalAlignment="Left" Width="129" Margin="10,10,0,0" Grid.ColumnSpan="3">
-                    <Button.Triggers>
-                        <EventTrigger RoutedEvent="Button.Click">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation
-            Storyboard.TargetName="theTransform"
-            Storyboard.TargetProperty="(RotateTransform.Angle)"
-            From="0" To="360" Duration="0:0:5" AutoReverse="True"/>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </Button.Triggers>
-                    Start Animation
-                </Button>
-                <Popup IsOpen="{Binding ElementName=PCheckBox,Path=IsChecked}"
-       PlacementTarget="{Binding ElementName=PCheckBox}"           
-       AllowsTransparency="True"
-       PopupAnimation="Slide"
-       HorizontalOffset="150"
-       VerticalOffset="100" Grid.ColumnSpan="3"
-       >
-
-                    <Canvas Width="100" Height="100" Background="Green" Margin="150">
-                        <Canvas.RenderTransform>
-                            <RotateTransform x:Name="theTransform" />
-                        </Canvas.RenderTransform>
-                        <TextBlock TextWrapping="Wrap" Foreground="LightGray">
-      Rotating Popup
-                        </TextBlock>
-                    </Canvas>
-                </Popup>
-            </Grid>
+        <TabItem Header="LIS数据库配置">
+            
         </TabItem>
 
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Net;
 namespace robotX
 {
     class CommonTool
@@ -11,6 +11,26 @@ namespace robotX
         public const string UrlReg = @"^[a-zA-Z]:(((\\(?! )[^/:*?<>\""|\\]+)+\\?)|(\\)?)\s*$";
         public const string IPReg = @"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$";
         public const string FTPReg = "^ ((.+):(.+)@)?" + IPReg + "(:[0-9]+)?$";
+        static private string localIP = "未接入局域网";
+        static public string LocalIP {
+            get {
+                IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+                foreach (IPAddress ip in host.AddressList)
+                {
+                    if (ip.AddressFamily.ToString() == "InterNetwork")
+                    {
+                        if (ip.ToString().StartsWith("192.168") ||  ip.ToString().StartsWith("172.") || ip.ToString().StartsWith("10."))//内网IP有3种：第一种10.0.0.0～10.255.255.255，第二种172.16.0.0～172.31.255.255，第三种192.168.0.0～192.168.255.255
+                        {
+                            localIP = ip.ToString();
+                        break;
+                        }
+
+                    }
+                }
+
+                return localIP; }
+            set { localIP = value; }
+        }
         static public string CaptureUpperCase(string CnStr)
         {
 

@@ -82,6 +82,9 @@
     <Compile Include="CmdSetService.cs" />
     <Compile Include="CommonTool.cs" />
     <Compile Include="ConfigLISService.cs" />
+    <Compile Include="ConfigSaver.xaml.cs">
+      <DependentUpon>ConfigSaver.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DBAcesser.cs" />
     <Compile Include="Property.cs" />
     <Compile Include="Resource.Designer.cs">
@@ -92,6 +95,10 @@
     <Compile Include="Saver.xaml.cs">
       <DependentUpon>Saver.xaml</DependentUpon>
     </Compile>
+    <Page Include="ConfigSaver.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

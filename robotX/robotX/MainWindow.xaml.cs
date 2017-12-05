@@ -16,7 +16,7 @@ using System.Xml;
 using System.Net;
 using System.IO;
 using System.Text.RegularExpressions;
-
+using System.Data;
 
 
 namespace robotX
@@ -37,13 +37,19 @@ namespace robotX
             InitializeComponent();
             lisService = new ConfigLISService(this);
             cmdService = new CmdSetService(this);
-
-            //p.Close();
-            lisService.SetMetaInfo();
+            lisService.FetchBoxList();
             cmdService.SetSysMeta();
         }
 
+        private void Button_FullFill(object sender, RoutedEventArgs e)
+        {
+            lisService.FullFill();
+        }
 
+        private void Button_Save(object sender, RoutedEventArgs e)
+        {
+            lisService.SaveConfig();
+        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -182,5 +188,8 @@ namespace robotX
         {
 
         }
+
+
+
     }
 }
