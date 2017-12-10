@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net;
+using System.IO;
 namespace robotX
 {
     class CommonTool
@@ -11,6 +12,8 @@ namespace robotX
         public const string UrlReg = @"^[a-zA-Z]:(((\\(?! )[^/:*?<>\""|\\]+)+\\?)|(\\)?)\s*$";
         public const string IPReg = @"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$";
         public const string FTPReg = "^ ((.+):(.+)@)?" + IPReg + "(:[0-9]+)?$";
+        public const string PortReg = "^[1-9]{1}[0-9]*$";
+        public const string AllNumReg = "^\\d+$";
         static private string localIP = "未接入局域网";
         static public string LocalIP {
             get {
@@ -52,7 +55,39 @@ namespace robotX
         }
 
 
+        public static void CopyDir(string fromDir, string toDir)
+        {
+            if (!Directory.Exists(fromDir))
+                return;
 
+            if (!Directory.Exists(toDir))
+            {
+                Directory.CreateDirectory(toDir);
+            }
+
+            string[] files = Directory.GetFiles(fromDir);
+            foreach (string file in files)
+            {
+                string fileName = Path.GetFileName(file);
+                string toFileName = Path.Combine(toDir, fileName);
+                if (File.Exists(toFileName))
+                {
+                    File.Delete(toFileName);
+                File.Copy(file, toFileName);
+                }
+                else
+                {
+                File.Copy(file, toFileName);
+                }
+            }
+            string[] fromDirs = Directory.GetDirectories(fromDir);
+            foreach (string fromDirName in fromDirs)
+            {
+                string dirName = Path.GetFileName(fromDirName);
+                string toDirName = Path.Combine(toDir, dirName);
+                CopyDir(fromDirName, toDirName);
+            }
+        }
 
         //处理单个字符
         private static string GetCharSpellCode(string CnChar)

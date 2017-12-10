@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:robotX"
         mc:Ignorable="d"
-        Title="。。。" Height="150" Width="300">
+        WindowStartupLocation="CenterScreen"
+        Title="。。。" Height="180" Width="400">
     <Grid>
         <StackPanel>
             
-        <GroupBox Header="填写医院名称并保存">
-                <TextBox Name="UNITNAME" Height="30"></TextBox>
+        <GroupBox Header="填写医院名称并保存" FontSize="15">
+                <TextBox Margin="0 10 0 0" Name="UNITNAME" Height="40" VerticalContentAlignment="Center"></TextBox>
             </GroupBox>
             <Button Margin="10 20 10 20" Height="30" Click="Button_Click">
                 存入数据库

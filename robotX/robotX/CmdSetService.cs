@@ -181,7 +181,7 @@ namespace robotX
 
                 }
             }
-            catch (System.Security.SecurityException e2)
+            catch (System.Security.SecurityException )
             {
                 MessageBox.Show("使用此功能需要用管理员权限打开此应用。");
             }

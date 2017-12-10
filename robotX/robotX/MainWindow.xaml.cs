@@ -19,6 +19,7 @@ using System.Text.RegularExpressions;
 using System.Data;
 
 
+
 namespace robotX
 {
     /// <summary>
@@ -48,15 +49,22 @@ namespace robotX
 
         private void Button_Save(object sender, RoutedEventArgs e)
         {
-            lisService.SaveConfig();
+            if (lisService.VerifyInput())
+            {
+                //执行替换
+                 lisService.SaveConfig();
+            }
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             try
             {
+                if (lisService.VerifyInput())
+                {
                 //执行替换
                 lisService.ConfigAll();
                 MessageBox.Show("替换成功!");
+                }
             }
             catch
             {
@@ -158,7 +166,7 @@ namespace robotX
         }
         void SavePara(object sender, object e)
         {
-            string parameter = (this.Parameter.Text != null)?this.Parameter.Text.Trim().Replace(" ",""): this.Parameter.Text;
+            string parameter = (this.Parameter.Text != null)?this.Parameter.Text.Trim().Replace(" ",""): null;
             if (parameter == null || parameter.Length == 0 )
             {
                 MessageBox.Show("参数输入框为空，无法保存参数");
@@ -188,8 +196,26 @@ namespace robotX
         {
 
         }
+        private void CopyFiles(object sender, RoutedEventArgs e)
+        {
+            //using (var fbd = new System.Windows.Forms.FolderBrowserDialog())
+            //{
+            //    System.Windows.Forms.DialogResult result = fbd.ShowDialog();
 
+            //    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+            //    {
+            //        string[] files = Directory.GetFiles(fbd.SelectedPath);
 
-
+            //        System.Windows.Forms.MessageBox.Show("Files found: " + files.Length.ToString(), "Message");
+            //    }
+            //}
+            System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
+            dialog.Description = "请选择配置文件保存的目标路径";
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string folderPath = dialog.SelectedPath;  //获得选择的路径； 
+                lisService.CopyFolders(folderPath);
+    }
+        }
     }
 }

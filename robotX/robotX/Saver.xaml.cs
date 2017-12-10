@@ -21,7 +21,9 @@ namespace robotX
     public partial class Saver : Window
     {
         string parameter;
-        public string Parameter { get { return parameter; }  set { parameter = value; this.Para.Text = value; } }
+        public string Parameter {
+            get { return parameter; }
+            set { parameter = value; this.Para.Text = value; } }
         private DBAcesser accesser = new DBAcesser();
         public Saver()
         {
@@ -31,14 +33,24 @@ namespace robotX
         }
         private void Save(object sender, RoutedEventArgs e)
         {
-            string name = (this.Name.Text != null) ? this.Name.Text.Trim().Replace(" ", "") : this.Name.Text.Trim();
+            string name = (this.Name.Text != null) ? this.Name.Text.Trim().Replace(" ", "") : null;
+            string sql = String.Format("SELECT count(*) from parameter where tag = '{0}'", name);
+            int nameCnt = accesser.GetCount(sql);
+            sql = String.Format("SELECT count(*) from parameter where para = '{0}'",Parameter);
+            int ParaCnt = accesser.GetCount(sql);
             if (name == null || name.Length == 0)
             {
                 MessageBox.Show("请输入正确的变量名称以便保存");
             }
-            else
+            else if (nameCnt > 0)
             {
-                string sql = String.Format("insert into Parameter(tag,para,capital) values('{0}','{1}','{2}')", name, Parameter, CommonTool.CaptureUpperCase(name));
+                MessageBox.Show("名称已存在");
+            }else if(ParaCnt > 0)
+            {
+                MessageBox.Show("参数已存在，不要重复保存");
+            }
+            else{
+                 sql = String.Format("insert into Parameter(tag,para,capital) values('{0}','{1}','{2}')", name, Parameter, CommonTool.CaptureUpperCase(name));
                 int result = accesser.Update(sql);
                 if (result == 1)
                 {

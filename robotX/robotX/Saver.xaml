@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:robotX"
         mc:Ignorable="d"
+         WindowStartupLocation="CenterScreen"
         Title="..." Height="300" Width="580">
             <GroupBox Header="保存">
     <Grid>

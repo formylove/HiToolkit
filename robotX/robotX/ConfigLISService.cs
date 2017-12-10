@@ -21,14 +21,15 @@ using System.Data;
 
 namespace robotX
 {
-    class ConfigLISService
+   public class ConfigLISService
     {
         private Window w;
         private DBAcesser acc = new DBAcesser();
         const string relUrl = @"./";
-        public string[,] args4XML = {{"HisWebServices_Clound/WEB-INF/classes/generatorConfig.xml", "//jdbcConnection", "/@connectionURL", "/@userId", "/@password" },
+        private string[,] args4XML = {{"HisWebServices_Clound/WEB-INF/classes/generatorConfig.xml", "//jdbcConnection", "/@connectionURL", "/@userId", "/@password" },
                               { "SupLab_Clound/WEB-INF/classes/generatorConfig.xml", "//jdbcConnection","/@connectionURL", "/@userId", "/@password"  },
                               { "SupLab_Clound/WEB-INF/classes/applicationContext-dataSource.xml", "//*","[@name='jdbcUrl']/@value", "[@name='user']/@value", "[@name='password']/@value" } };
+        private  string[] folderList = { "HisWebServices_Clound", "SupLab_Clound", "SvMatrixServer" };
         string ipHis;
         string ipLis;
         string tomcatPort;
@@ -46,12 +47,29 @@ namespace robotX
         string hisDBPSW;
         string lisDBPSW;
         bool isNewHIS = true;
+        TextBlock result;
+
+        public void CopyFolders(string path)
+        {
+            foreach (string folder in folderList)
+            {
+                string AsbUrl = relUrl + folder;
+                if (Directory.Exists(AsbUrl))
+                {
+                    string[] files = Directory.GetFiles(AsbUrl);  
+                    foreach(string file in files)
+                    {
+                        CommonTool.CopyDir(AsbUrl,  System.IO.Path.Combine(path,folder) );
+                    }
+                }
+
+            }
+
+
+        }
         public ConfigLISService(Window w)
         {
             this.w = w;
-        }
-        public void Init()
-        {
             ipHis = ((TextBox)w.FindName("HisIP")).Text;
             ipLis = ((TextBox)w.FindName("LisIP")).Text;
             tomcatPort = ((TextBox)w.FindName("TomcatPort")).Text;
@@ -65,7 +83,7 @@ namespace robotX
             hisDBPSW = ((TextBox)w.FindName("HisDBPSW")).Text;
             lisDBPSW = ((TextBox)w.FindName("LisDBPSW")).Text;
             isNewHIS = (bool)(((CheckBox)w.FindName("IsNewHIS")).IsChecked);
-
+            result = ((TextBlock)w.FindName("DeployResult"));
         }
         Dictionary<string, string> defaultConfig = new Dictionary<string, string>(){
             { "HisDBUser", "suphiv3"}, { "HisDBPSW", "suphiv3" }, { "HisORCLInstance", "orcl" },
@@ -142,8 +160,8 @@ namespace robotX
            sql = String.Format(sql, columms, values);
             ConfigSaver cs = new ConfigSaver();
             cs.Sql = sql;
+            cs.LisService = this;
             cs.Show();
-            FetchBoxList();
 
 
         }
@@ -162,44 +180,44 @@ namespace robotX
             box.SelectedValuePath = "ID";
             box.SelectedIndex = box.Items.Count - 1;
         }
-        public void ConfigTheIni()
+        private int count = 0;
+        public void  ConfigTheIni()
         {
             string[] fileList = { "SvMatrixServer/Config/Matrix.ini", "LIS_Cloud/Config/Matrix.ini" };
             string[] contents = { ipMatrix, portMatrix };
             foreach (string f in fileList)
             {
+                if (File.Exists(relUrl + f))
+                {
                 File.WriteAllLines(relUrl + f, contents);
+                    count++;
+                    result.Text += f + " 配置完成！" + Environment.NewLine;
+                }
             }
         }
         public void ConfigTheXML()
         {
-            // bool rightIP = Regex.IsMatch(ipLis, ipReg);
-            bool rightIP = true;
-
+            count = 0;
             string connectionURL = "jdbc:oracle:thin:@" + ipLis + ":1521:" + lisORCLInstance;
             string[] values = { connectionURL, lisDBUser, lisDBPSW };
-
-
-
-            if (rightIP)
-            {
                 XmlDocument xml;
                 for (int i = 0; i < 3; i++)
                 {
-                    xml = new XmlDocument();
-                    xml.Load(relUrl + args4XML[i, 0]);
-                    for (int j = 2; j < 5; j++)
+                    if (File.Exists(relUrl + args4XML[i, 0]))
                     {
-                        //XPath by itself cannot be used to modify XML documents.But the xmlstarlet command line utility can do it.
-                        xml.SelectSingleNode(args4XML[i, 1] + args4XML[i, j]).Value = values[j - 2];
-                        xml.Save(relUrl + args4XML[i, 0]);
+                         count++;
+                        xml = new XmlDocument();
+                        xml.Load(relUrl + args4XML[i, 0]);
+                        for (int j = 2; j < 5; j++)
+                        {
+                            //XPath by itself cannot be used to modify XML documents.But the xmlstarlet command line utility can do it.
+                            xml.SelectSingleNode(args4XML[i, 1] + args4XML[i, j]).Value = values[j - 2];
+                            xml.Save(relUrl + args4XML[i, 0]);
+                        }
+                    result.Text += args4XML[i, 0] + " 配置完成！" + Environment.NewLine;
                     }
                 }
 
-            }
-            else
-            {
-            }
         }
 
         public void ConfigTheProperties()
@@ -210,7 +228,12 @@ namespace robotX
 
             foreach (string p in fileList)
             {
-                ReplaceItem(p);
+                if(File.Exists(relUrl + p))
+                {
+                    count++;
+                    ReplaceItem(p);
+                    result.Text += p + " 配置完成！" + Environment.NewLine;
+                }
             }
 
 
@@ -220,7 +243,6 @@ namespace robotX
         public void ReplaceItem(string path)
         {
             bool rightIP = Regex.IsMatch(ipLis, CommonTool.IPReg);
-
 
             StreamReader r = new StreamReader(relUrl + path, Encoding.UTF8);
             FileStream fs = new FileStream(relUrl + path + "Copy", FileMode.Create);
@@ -272,13 +294,38 @@ namespace robotX
             fCopy.MoveTo(relUrl + path);
 
         }
+  
         public void ConfigAll()
         {
-            Init();
             ConfigTheXML();
             ConfigTheIni();
             ConfigTheProperties();
+            if (count == 0)
+            {
+                result.Text = "未发现需要配置的文件" + Environment.NewLine;
+            }
+            else
+            {
+                result.Text += "所有字段置换完成" + Environment.NewLine;
+            }
         }
-
+        Dictionary<string, string> Verifier = new Dictionary<string, string>(){
+            { "HisIP", CommonTool.IPReg },{ "HisDBUser", ".*"}, { "HisDBPSW",".*"}, { "HisORCLInstance", ".*" },
+            { "LisIP", CommonTool.IPReg }, { "LisDBUser", ".*" }, { "LisDBPSW", ".*"}, { "LisORCLInstance", ".*" },
+            { "MatrixIP", CommonTool.IPReg }, { "MatrixPort", CommonTool.PortReg }, { "TomcatPort",  CommonTool.PortReg},
+            { "UnitsCode", CommonTool.AllNumReg }};
+        public bool VerifyInput()
+        {
+            foreach(string key in Verifier.Keys)
+            {
+                string input = ((TextBox)w.FindName(key)).Text;
+                if(String.IsNullOrWhiteSpace(input) || !Regex.IsMatch(input,Verifier[key]))
+                {
+                    MessageBox.Show(key + " 字段格式错误，请重新输入！");
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }

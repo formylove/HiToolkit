@@ -18,8 +18,9 @@ namespace robotX
     /// </summary>
     public partial class ConfigSaver : Window
     {
-        string sql;
         DBAcesser dba = new DBAcesser();
+        private ConfigLISService lisService;
+        public ConfigLISService LisService{ get; set; }
         public string Sql { get; set; }
         public ConfigSaver()
         {
@@ -29,19 +30,24 @@ namespace robotX
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string name = this.UNITNAME.Text;
+            string name = this.UNITNAME.Text == null ? null: this.UNITNAME.Text.Trim().Replace(" ", "");
+            string sql = String.Format("SELECT count(*) from lisconfig where unitname = '{0}'",name);
+
+            int count =  dba.GetCount(sql);
             if (String.IsNullOrWhiteSpace(name))
             {
                 MessageBox.Show("医院名称不能为空");
             }
-            else
-            {
-                name = name.Trim().Replace(" ","");
+            else if (count > 0) {
+                MessageBox.Show("医院名称已存在，请重新输入！");
+            }
+            else{
                 Sql = Sql.Replace("????",name);
                 int resultCount = dba.Update(Sql);
                 if (resultCount == 1)
                 {
                 MessageBox.Show("保存成功！");
+                    LisService.FetchBoxList();
                     this.Close();
                 }
             }
