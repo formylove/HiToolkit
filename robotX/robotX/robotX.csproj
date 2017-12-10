@@ -87,6 +87,9 @@
       <DependentUpon>ConfigSaver.xaml</DependentUpon>
     </Compile>
     <Compile Include="DBAcesser.cs" />
+    <Compile Include="Progresser.xaml.cs">
+      <DependentUpon>Progresser.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Property.cs" />
     <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -116,6 +119,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Progresser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Saver.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

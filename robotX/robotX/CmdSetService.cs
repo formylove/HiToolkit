@@ -221,7 +221,17 @@ namespace robotX
             }
             sMeta.Text += "计算机名：" + Environment.MachineName + Environment.NewLine;
             sMeta.Text += "用户名   ：" + Environment.UserName + Environment.NewLine;
+            string dotNetVersion = Environment.Version.ToString();
+            if (String.IsNullOrWhiteSpace(dotNetVersion))
+            {
+            sMeta.Text += ".Net版本 ：" + "本机未安装.NET" + Environment.NewLine;
 
+            }
+            else
+            {
+            sMeta.Text += ".Net版本 ：" + dotNetVersion.Substring(0,3) + Environment.NewLine;
+
+            }
             //String hostInfo = Dns.GetHostName();//获取本机的计算机名  
             //richTextBox1.AppendText("计算机名:" + SystemInformation.ComputerName);
             //richTextBox1.AppendText(Environment.NewLine);//换行  

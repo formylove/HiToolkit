@@ -54,18 +54,25 @@ namespace robotX
 
         }
 
+        private static string[] folderList = { "HisWebServices_Clound", "SupLab_Clound", "SvMatrixServer" };
 
         public static void CopyDir(string fromDir, string toDir)
         {
+            string[] files = Directory.GetFiles(fromDir);
+
+
             if (!Directory.Exists(fromDir))
+            {
                 return;
+            }
+
+
 
             if (!Directory.Exists(toDir))
             {
                 Directory.CreateDirectory(toDir);
             }
-
-            string[] files = Directory.GetFiles(fromDir);
+            //复制文件
             foreach (string file in files)
             {
                 string fileName = Path.GetFileName(file);
@@ -77,16 +84,26 @@ namespace robotX
                 }
                 else
                 {
+                    try
+                    {
                 File.Copy(file, toFileName);
+                    }
+                    catch(System.IO.IOException e)
+                    {
+                        
+                    }
                 }
+                //改变进度条状态
             }
+            //处理文件夹
             string[] fromDirs = Directory.GetDirectories(fromDir);
-            foreach (string fromDirName in fromDirs)
+            foreach (string dir in fromDirs)
             {
-                string dirName = Path.GetFileName(fromDirName);
+                string dirName = Path.GetFileName(dir);
                 string toDirName = Path.Combine(toDir, dirName);
-                CopyDir(fromDirName, toDirName);
+                CopyDir(dir, toDirName);//递归
             }
+           
         }
 
         //处理单个字符

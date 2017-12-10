@@ -103,9 +103,10 @@
             </DockPanel>
         </TabItem>
         <TabItem Header=" LIS一键配置" Style="{StaticResource Tab}">
-            <StackPanel>
+            <DockPanel>
+            <StackPanel DockPanel.Dock="Top">
 
-                <GroupBox Header="HIS配置" Grid.Row="0">
+                <GroupBox Header="HIS数据库配置" Grid.Row="0">
                     <StackPanel Name="HISPanel" Orientation="Horizontal" Margin="0 20 0 10 ">
                         <Label >IP</Label>
                         <TextBox Name="HisIP"  Style="{StaticResource LisTextBox}"   Margin="10 0 0 0 "  />
@@ -117,7 +118,7 @@
                         <TextBox Name="HisORCLInstance"  Margin="{Binding ElementName=HisIP,Path=Margin}" Style="{StaticResource LisTextBox}"  />
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Header="LIS配置" Grid.Row="0">
+                <GroupBox Header="LIS数据库配置" Grid.Row="0">
                     <StackPanel  Orientation="Horizontal"  Margin="{Binding ElementName=HISPanel,Path=Margin}">
                         <Label >IP</Label>
                         <TextBox Name="LisIP" Margin="{Binding ElementName=HisIP,Path=Margin}" Style="{StaticResource LisTextBox}"  />
@@ -154,12 +155,14 @@
                     <Button  Click="Button_Click"  Margin="{Binding Margin, ElementName=Save}"   Style="{StaticResource LisButton}"  Content="执行部署"/>
                     <Button  Click="CopyFiles"  Margin="{Binding Margin, ElementName=Save}"   Style="{StaticResource LisButton}"  Content="拷贝软件"/>
                 </StackPanel>
-                <GroupBox  Header="部署日志" Margin="0 0 5 5 ">
-                    <ScrollViewer >
-                        <TextBlock Height="190"  LineHeight="37"   Name="DeployResult" TextWrapping="Wrap" Text="" />
+
+            </StackPanel>
+                <GroupBox  Header="部署日志" Margin="0 0 5 5 " DockPanel.Dock="Bottom">
+                    <ScrollViewer  VerticalScrollBarVisibility="Auto"  >
+                        <TextBlock   LineHeight="37"  Name="DeployResult" TextWrapping="Wrap" Text="" />
                     </ScrollViewer>
                 </GroupBox>
-            </StackPanel>
+            </DockPanel>
             <!--添加其余的TabItem-->
         </TabItem>
         <TabItem Header="用户信息" Style="{StaticResource Tab}">

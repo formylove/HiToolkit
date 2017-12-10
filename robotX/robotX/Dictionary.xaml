@@ -16,7 +16,6 @@
     </Style>
     <Style x:Key="Tab" TargetType="TabItem">
         <Setter Property="FontSize" Value="15"></Setter>
-        <Setter Property="FontWeight" Value="Bold"></Setter>
         <Setter Property="Width" Value="180"></Setter>
         <Setter Property="Height" Value="30"></Setter>
     </Style>

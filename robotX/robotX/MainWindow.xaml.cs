@@ -63,7 +63,6 @@ namespace robotX
                 {
                 //执行替换
                 lisService.ConfigAll();
-                MessageBox.Show("替换成功!");
                 }
             }
             catch

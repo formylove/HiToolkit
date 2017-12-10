@@ -51,39 +51,31 @@ namespace robotX
 
         public void CopyFolders(string path)
         {
+            this.result.Text = "";
+            bool hasCopyed = false;
             foreach (string folder in folderList)
             {
                 string AsbUrl = relUrl + folder;
                 if (Directory.Exists(AsbUrl))
                 {
-                    string[] files = Directory.GetFiles(AsbUrl);  
-                    foreach(string file in files)
-                    {
-                        CommonTool.CopyDir(AsbUrl,  System.IO.Path.Combine(path,folder) );
-                    }
+                    hasCopyed = true;
+                    CommonTool.CopyDir(AsbUrl,  System.IO.Path.Combine(path,folder) );
+                    this.result.Text += folder + " 拷贝成功" + Environment.NewLine;
                 }
-
             }
-
+            if (hasCopyed)
+            {
+                this.result.Text += "项目成功拷贝到了 <" + path + " >目录下" + Environment.NewLine; ;
+            }
+            else
+            {
+                this.result.Text = "没有文件被拷贝，轻查看路径下是否有模板项目文件" + Environment.NewLine; ;
+            }
 
         }
         public ConfigLISService(Window w)
         {
             this.w = w;
-            ipHis = ((TextBox)w.FindName("HisIP")).Text;
-            ipLis = ((TextBox)w.FindName("LisIP")).Text;
-            tomcatPort = ((TextBox)w.FindName("TomcatPort")).Text;
-            ipMatrix = ((TextBox)w.FindName("MatrixIP")).Text;
-            portMatrix = ((TextBox)w.FindName("MatrixPort")).Text;
-            unitsCode = ((TextBox)w.FindName("UnitsCode")).Text;
-            hisORCLInstance = ((TextBox)w.FindName("HisORCLInstance")).Text;
-            lisORCLInstance = ((TextBox)w.FindName("LisORCLInstance")).Text;
-            hisDBUser = ((TextBox)w.FindName("HisDBUser")).Text;
-            lisDBUser = ((TextBox)w.FindName("LisDBUser")).Text;
-            hisDBPSW = ((TextBox)w.FindName("HisDBPSW")).Text;
-            lisDBPSW = ((TextBox)w.FindName("LisDBPSW")).Text;
-            isNewHIS = (bool)(((CheckBox)w.FindName("IsNewHIS")).IsChecked);
-            result = ((TextBlock)w.FindName("DeployResult"));
         }
         Dictionary<string, string> defaultConfig = new Dictionary<string, string>(){
             { "HisDBUser", "suphiv3"}, { "HisDBPSW", "suphiv3" }, { "HisORCLInstance", "orcl" },
@@ -197,7 +189,6 @@ namespace robotX
         }
         public void ConfigTheXML()
         {
-            count = 0;
             string connectionURL = "jdbc:oracle:thin:@" + ipLis + ":1521:" + lisORCLInstance;
             string[] values = { connectionURL, lisDBUser, lisDBPSW };
                 XmlDocument xml;
@@ -295,19 +286,44 @@ namespace robotX
 
         }
   
+        public void AssignVariable()
+        {
+            ipHis = ((TextBox)w.FindName("HisIP")).Text;
+            ipLis = ((TextBox)w.FindName("LisIP")).Text;
+            tomcatPort = ((TextBox)w.FindName("TomcatPort")).Text;
+            ipMatrix = ((TextBox)w.FindName("MatrixIP")).Text;
+            portMatrix = ((TextBox)w.FindName("MatrixPort")).Text;
+            unitsCode = ((TextBox)w.FindName("UnitsCode")).Text;
+            hisORCLInstance = ((TextBox)w.FindName("HisORCLInstance")).Text;
+            lisORCLInstance = ((TextBox)w.FindName("LisORCLInstance")).Text;
+            hisDBUser = ((TextBox)w.FindName("HisDBUser")).Text;
+            lisDBUser = ((TextBox)w.FindName("LisDBUser")).Text;
+            hisDBPSW = ((TextBox)w.FindName("HisDBPSW")).Text;
+            lisDBPSW = ((TextBox)w.FindName("LisDBPSW")).Text;
+            isNewHIS = (bool)(((CheckBox)w.FindName("IsNewHIS")).IsChecked);
+            result = ((TextBlock)w.FindName("DeployResult"));
+
+        }
         public void ConfigAll()
         {
+            count = 0;
+            AssignVariable();
+            result.Text = "";
+
             ConfigTheXML();
             ConfigTheIni();
             ConfigTheProperties();
+
             if (count == 0)
             {
                 result.Text = "未发现需要配置的文件" + Environment.NewLine;
             }
             else
             {
-                result.Text += "所有字段置换完成" + Environment.NewLine;
+                result.Text += "所有字段置换完成，共配置了" + count + "个文件" + Environment.NewLine;
             }
+
+
         }
         Dictionary<string, string> Verifier = new Dictionary<string, string>(){
             { "HisIP", CommonTool.IPReg },{ "HisDBUser", ".*"}, { "HisDBPSW",".*"}, { "HisORCLInstance", ".*" },
